@@ -1,0 +1,158 @@
+
+PROMPT entities
+
+eres un experto en desarrollo backend spring boot , desarrolla las entidades para hibernate usando relaciones 1 a 1, 1 a N, N a M para las siguientes entidades del modelo ER:
+
+Tabla: CARRERA: Almacena las carreras impartidas por la institución.
+
+Campo Tipo Restricción
+
+Id INT PK
+
+nombre_carrera	VARCHAR(100)	NOT NULL
+
+facultad VARCHAR(100)	NOT NULL
+
+
+
+
+
+Tabla: ESTUDIANTE: Almacena los estudiantes que realizan reservas.
+
+Campo Tipo Restricción
+
+id INT PK
+
+rut VARCHAR(12)	UNIQUE
+
+nombre VARCHAR(100)	NOT NULL
+
+apellido VARCHAR(100)	NOT NULL
+
+correo VARCHAR(150)	UNIQUE
+
+telefono VARCHAR(20)	
+
+fecha_registro	DATE NOT NULL
+
+id_carrera	INT FK
+
+
+
+
+
+Tabla: EDIFICIO: Permite identificar dónde se encuentran las salas.
+
+Campo Tipo Restricción
+
+id INT PK
+
+nombre_edificio	VARCHAR(100)	NOT NULL
+
+direccion VARCHAR(200)	NOT NULL
+
+
+
+
+
+Tabla: SALA: Información de las salas de estudio.
+
+Campo Tipo Restricción
+
+id INT PK
+
+codigo_sala	VARCHAR(20)	UNIQUE
+
+nombre_sala	VARCHAR(100)	NOT NULL
+
+capacidad	INT NOT NULL
+
+piso INT NOT NULL
+
+descripcion	VARCHAR(255)	NOT NULL
+
+estado VARCHAR(30)	NOT NULL
+
+id_edificio	INT FK
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Tabla: HORARIO_DISPONIBLE: Define los bloques horarios que pueden reservarse.
+
+Campo Tipo Restricción
+
+id INT PK
+
+id_sala INT FK
+
+hora_inicio	TIME NOT NULL
+
+hora_termino	TIME NOT NULL
+
+
+
+Ejemplos:
+
+Inicio	Término
+
+08:00	09:30
+
+09:30	11:00
+
+11:00	14:30
+
+
+
+
+
+Tabla: ESTADO_RESERVA: Catálogo de estados.
+
+Campo Tipo Restricción
+
+id_estado INT PK
+
+nombre_estado	VARCHAR(30)	NOT NULL
+
+
+
+Ejemplos:
+
+Confirmada
+Cancelada
+
+
+Tabla: RESERVA: Entidad principal del sistema.
+
+Campo Tipo Restricción
+
+id INT PK
+
+fecha_reserva	DATE NOT NULL
+
+observacion	VARCHAR(255)	NOT NULL
+
+fecha_creacion	DATETIME	NOT NULL
+
+id_estudiante	INT FK
+
+id_sala INT FK
+
+id_horario	INT FK
+
+id_estado INT FK
