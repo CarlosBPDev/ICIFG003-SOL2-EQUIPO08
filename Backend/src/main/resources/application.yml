@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: back
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/demo01
+    username: ${DB_USERNAME:postgres}
+    password: 1234
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+server:
+  port: ${PORT:6789}
