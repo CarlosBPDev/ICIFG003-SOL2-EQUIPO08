@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,21 +24,30 @@ public class SalaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "codigo_sala", unique = true)
+    @Column(name = "codigo_sala", length = 20, unique = true)
     private String codigoSala;
 
-    @Column(name = "nombre_sala")
+    @NotNull
+    @Column(name = "nombre_sala", length = 100, nullable = false)
     private String nombreSala;
 
+    @NotNull
+    @Column(nullable = false)
     private Integer capacidad;
+
+    @NotNull
+    @Column(nullable = false)
     private Integer piso;
 
-    @Column(columnDefinition = "TEXT")
+    @NotNull
+    @Column(length = 255, nullable = false)
     private String descripcion;
 
+    @NotNull
+    @Column(length = 30, nullable = false)
     private String estado;
 
     @ManyToOne
-    @JoinColumn(name = "edificio_id")
+    @JoinColumn(name = "id_edificio")
     private EdificioEntity edificio;
 }

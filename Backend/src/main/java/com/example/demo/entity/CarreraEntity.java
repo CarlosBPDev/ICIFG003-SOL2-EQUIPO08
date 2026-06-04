@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,8 +22,11 @@ public class CarreraEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nombre_carrera")
+    @NotNull
+    @Column(name = "nombre_carrera", length = 100, nullable = false)
     private String nombreCarrera;
 
+    @NotNull
+    @Column(length = 100, nullable = false)
     private String facultad;
 }
