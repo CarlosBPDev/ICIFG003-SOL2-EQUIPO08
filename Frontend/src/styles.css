@@ -1,17 +1,17 @@
 :root {
-  --color-primario: #2c3e50;
-  --color-secundario: #3498db;
-  --color-acento: #e74c3c;
-  --fondo-claro: #ecf0f1;
-  --fondo-tarjeta: #ffffff;
-  --color-fuente: #333333;
+  --color-primario: #6366f1;
+  --color-secundario: #a855f7;
+  --color-acento: #ef4444;
+  --fondo-claro: #0b0f19;
+  --fondo-tarjeta: #1e293b;
+  --color-fuente: #f1f5f9;
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
+  font-family: "Outfit", "Inter", sans-serif;
 }
 
 body {

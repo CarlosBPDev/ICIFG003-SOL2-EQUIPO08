@@ -1,0 +1,93 @@
+<div class="reservas-container">
+  <header class="reservas-header">
+    <div class="header-overlay"></div>
+    <div class="header-content">
+      <h1>Panel de Reservas</h1>
+      <p>Consulta las reservas activas y gestiona los horarios de las salas</p>
+    </div>
+  </header>
+
+  <main class="reservas-main">
+    <!-- Selector de Criterios -->
+    <section class="criterios-card">
+      <h2>Seleccionar Sala y Fecha</h2>
+      
+      <div class="criterios-grid">
+        <!-- Selector Sala -->
+        <div class="criterio-group">
+          <label for="salaSelect">Sala de Estudio</label>
+          <select id="salaSelect" [(ngModel)]="selectedSalaId" (change)="onCriteriaChange()" class="select-input">
+            <option [ngValue]="null" disabled selected>Elige una sala...</option>
+            <option *ngFor="let sala of salas" [ngValue]="sala.id">
+              {{ sala.nombreSala }} ({{ sala.codigoSala }} - Cap. {{ sala.capacidad }})
+            </option>
+          </select>
+        </div>
+
+        <!-- Selector Fecha -->
+        <div class="criterio-group">
+          <label for="fechaInput">Fecha de Consulta</label>
+          <input type="date" id="fechaInput" [(ngModel)]="selectedFecha" (change)="onCriteriaChange()" class="date-picker">
+        </div>
+      </div>
+    </section>
+
+    <!-- Resultados -->
+    <section class="reservas-table-section" *ngIf="selectedSalaId && selectedFecha">
+      <div class="section-header">
+        <div class="header-title-group">
+          <h3>Reservas Encontradas</h3>
+          <!-- Contador Dinámico -->
+          <div class="counter-badge">
+            <span class="count">{{ totalReservasDelDia }}</span>
+            <span class="label">Reservas del día</span>
+          </div>
+        </div>
+        <div *ngIf="loading" class="spinner"></div>
+      </div>
+
+      <div class="table-container" *ngIf="reservas.length > 0; else noReservas">
+        <table class="reservas-table">
+          <thead>
+            <tr>
+              <th>ID Reserva</th>
+              <th>Estudiante</th>
+              <th>Hora Inicio</th>
+              <th>Hora Fin</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of reservas">
+              <td class="reserva-id">#{{ r.id }}</td>
+              <td class="student-info">
+                <span class="name">{{ r.estudiante?.nombre }} {{ r.estudiante?.apellido }}</span>
+                <span class="email">{{ r.estudiante?.correo }}</span>
+              </td>
+              <td class="time-cell">{{ r.horarioDisponible?.horaInicio || 'N/A' }}</td>
+              <td class="time-cell">{{ r.horarioDisponible?.horaTermino || 'N/A' }}</td>
+              <td>
+                <span class="status-pill" [class.confirmada]="r.estadoReserva?.nombreEstado === 'Confirmada'" [class.cancelada]="r.estadoReserva?.nombreEstado === 'Cancelada'">
+                  {{ r.estadoReserva?.nombreEstado || 'Pendiente' }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #noReservas>
+        <div class="empty-state">
+          <span class="empty-icon">📅</span>
+          <p>No existen reservas registradas para esta sala en la fecha seleccionada.</p>
+        </div>
+      </ng-template>
+    </section>
+
+    <!-- Instrucciones iniciales -->
+    <section class="initial-state" *ngIf="!selectedSalaId || !selectedFecha">
+      <span class="search-icon">🔍</span>
+      <p>Selecciona una sala y una fecha para visualizar el calendario de reservas.</p>
+    </section>
+  </main>
+</div>
