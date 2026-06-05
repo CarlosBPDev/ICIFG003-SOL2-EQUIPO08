@@ -1,0 +1,4 @@
+<div *ngIf="texto" class="mensaje" [class.mensaje-exito]="tipo === 'exito'" [class.mensaje-error]="tipo === 'error'" [class.mensaje-advertencia]="tipo === 'advertencia'" role="alert" aria-live="polite">
+  <i class="fas {{ icono }}"></i>
+  <span>{{ texto }}</span>
+</div>

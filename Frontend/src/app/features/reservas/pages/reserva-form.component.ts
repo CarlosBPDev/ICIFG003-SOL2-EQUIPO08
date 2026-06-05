@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { MensajeComponent } from '../../../shared/components/mensaje/mensaje.component';
 import { EstudianteService } from '../../../services/estudiante.service';
 import { SalaService } from '../../../services/sala.service';
 import { HorarioService } from '../../../services/horario.service';
@@ -19,7 +20,7 @@ function fechaNoAnteriorAHoy(control: AbstractControl): ValidationErrors | null 
 @Component({
   selector: 'app-reserva-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, MensajeComponent],
   templateUrl: './reserva-form.component.html',
   styleUrls: ['./reserva-form.component.css']
 })

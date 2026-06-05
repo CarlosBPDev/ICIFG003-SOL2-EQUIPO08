@@ -351,24 +351,6 @@
   border-radius: 0.75rem;
 }
 
-.error-banner {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.25);
-  border-radius: 0.75rem;
-  padding: 1rem 1.25rem;
-  color: var(--color-error);
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.error-icon {
-  font-size: 1.25rem;
-  flex-shrink: 0;
-}
-
 .form-actions {
   display: flex;
   justify-content: flex-end;

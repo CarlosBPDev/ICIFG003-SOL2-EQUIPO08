@@ -147,10 +147,7 @@
         </div>
       </section>
 
-      <div *ngIf="errorConflicto" class="error-banner" role="alert" aria-live="assertive">
-        <span class="error-icon">&#9888;</span>
-        <span>{{ errorConflicto }}</span>
-      </div>
+      <app-mensaje [tipo]="'error'" [texto]="errorConflicto"></app-mensaje>
 
       <div class="form-actions">
         <a routerLink="/reservas" class="btn-cancel" tabindex="10">Cancelar</a>
