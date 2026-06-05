@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@400;600;700;800&display=swap');
+
 :root {
   --color-primario: #6366f1;
   --color-secundario: #a855f7;
@@ -5,17 +7,55 @@
   --fondo-claro: #0b0f19;
   --fondo-tarjeta: #1e293b;
   --color-fuente: #f1f5f9;
+
+  --fondo-host: #0f172a;
+  --fondo-card: rgba(30, 41, 59, 0.7);
+  --fondo-input: rgba(15, 23, 42, 0.6);
+  --fondo-disabled: #334155;
+
+  --texto-principal: #f1f5f9;
+  --texto-secundario: #e2e8f0;
+  --texto-muted: #94a3b8;
+  --texto-disabled: #64748b;
+
+  --color-exito: #4ade80;
+  --color-error: #f87171;
+  --color-advertencia: #eab308;
+
+  --borde-sutil: rgba(255, 255, 255, 0.08);
+  --borde-focus: #6366f1;
+
+  --sombra-card: 0 10px 30px rgba(0, 0, 0, 0.2);
+  --sombra-primario: 0 4px 15px rgba(99, 102, 241, 0.2);
+
+  --fuente-principal: 'Outfit', 'Inter', sans-serif;
+  --fuente-mono: monospace;
+
+  /* --bp-mobile: 768px */
+  /* --bp-tablet: 1024px */
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Outfit", "Inter", sans-serif;
+  font-family: var(--fuente-principal);
 }
 
 body {
   background-color: var(--fondo-claro);
   color: var(--color-fuente);
   min-height: 100vh;
+}
+
+@media (max-width: 1023px) {
+  body {
+    padding: 0 0.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    padding: 0;
+  }
 }

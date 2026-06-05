@@ -1,8 +1,8 @@
 :host {
   display: block;
-  font-family: 'Outfit', 'Inter', sans-serif;
-  color: #f1f5f9;
-  background-color: #0f172a;
+  font-family: var(--fuente-principal);
+  color: var(--texto-principal);
+  background-color: var(--fondo-host);
   min-height: 100vh;
 }
 
@@ -48,7 +48,7 @@
 }
 
 .header-content p {
-  color: #94a3b8;
+  color: var(--texto-muted);
   margin: 0;
   font-size: 1.1rem;
 }
@@ -60,20 +60,20 @@
 }
 
 .form-card {
-  background: rgba(30, 41, 59, 0.7);
+  background: var(--fondo-card);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 1.25rem;
   padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--borde-sutil);
+  box-shadow: var(--sombra-card);
 }
 
 .form-card h2 {
   font-size: 1rem;
   font-weight: 700;
   margin: 0 0 1.25rem 0;
-  color: #e2e8f0;
+  color: var(--texto-secundario);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -87,7 +87,7 @@
 .form-field label {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #94a3b8;
+  color: var(--texto-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -104,7 +104,7 @@
 .form-field textarea {
   width: 100%;
   padding: 0.8rem 1rem;
-  background: rgba(15, 23, 42, 0.6);
+  background: var(--fondo-input);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 0.75rem;
   color: #ffffff;
@@ -118,7 +118,7 @@
 .form-field input:focus,
 .form-field select:focus,
 .form-field textarea:focus {
-  border-color: #6366f1;
+  border-color: var(--borde-focus);
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
 }
 
@@ -134,13 +134,13 @@
 
 .field-hint {
   font-size: 0.75rem;
-  color: #64748b;
+  color: var(--texto-disabled);
 }
 
 .field-error {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #f87171;
+  color: var(--color-error);
   margin: 0.25rem 0 0 0;
   background: rgba(239, 68, 68, 0.1);
   padding: 0.5rem 0.75rem;
@@ -153,7 +153,7 @@
   width: 18px;
   height: 18px;
   border: 2px solid rgba(255, 255, 255, 0.1);
-  border-top-color: #6366f1;
+  border-top-color: var(--borde-focus);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -203,18 +203,18 @@
 .resultado-rut {
   font-size: 0.8rem;
   color: #818cf8;
-  font-family: monospace;
+  font-family: var(--fuente-mono);
 }
 
 .resultado-correo {
   font-size: 0.8rem;
-  color: #64748b;
+  color: var(--texto-disabled);
 }
 
 .sin-resultados {
   padding: 1rem;
   text-align: center;
-  color: #94a3b8;
+  color: var(--texto-muted);
   font-size: 0.9rem;
   background: rgba(15, 23, 42, 0.3);
   border-radius: 0.75rem;
@@ -264,13 +264,13 @@
 
 .estudiante-detalle {
   font-size: 0.8rem;
-  color: #94a3b8;
+  color: var(--texto-muted);
 }
 
 .btn-quitar {
   background: rgba(239, 68, 68, 0.1);
   border: 1px solid rgba(239, 68, 68, 0.2);
-  color: #f87171;
+  color: var(--color-error);
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -285,7 +285,7 @@
 
 .btn-quitar:hover {
   background: rgba(239, 68, 68, 0.25);
-  border-color: #f87171;
+  border-color: var(--color-error);
 }
 
 .horarios-grid {
@@ -318,7 +318,7 @@
 
 .horario-btn.selected {
   background: rgba(99, 102, 241, 0.2);
-  border-color: #6366f1;
+  border-color: var(--borde-focus);
   color: #ffffff;
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
 }
@@ -335,7 +335,7 @@
 
 .horario-sep {
   font-size: 0.7rem;
-  color: #64748b;
+  color: var(--texto-disabled);
 }
 
 .cargando-horarios,
@@ -344,7 +344,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 1.5rem;
-  color: #94a3b8;
+  color: var(--texto-muted);
   font-size: 0.9rem;
   justify-content: center;
   background: rgba(15, 23, 42, 0.3);
@@ -359,7 +359,7 @@
   border: 1px solid rgba(239, 68, 68, 0.25);
   border-radius: 0.75rem;
   padding: 1rem 1.25rem;
-  color: #f87171;
+  color: var(--color-error);
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -381,7 +381,7 @@
   border-radius: 0.75rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: transparent;
-  color: #94a3b8;
+  color: var(--texto-muted);
   font-family: inherit;
   font-size: 0.95rem;
   font-weight: 600;
@@ -405,9 +405,9 @@
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  background: linear-gradient(135deg, var(--color-primario), #4f46e5);
   color: #ffffff;
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+  box-shadow: var(--sombra-primario);
   transition: all 0.25s ease;
   display: inline-flex;
   align-items: center;
@@ -420,8 +420,8 @@
 }
 
 .btn-submit:disabled {
-  background: #334155;
-  color: #64748b;
+  background: var(--fondo-disabled);
+  color: var(--texto-disabled);
   cursor: not-allowed;
   box-shadow: none;
 }

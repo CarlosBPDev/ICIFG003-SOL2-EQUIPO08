@@ -43,7 +43,7 @@
 
 .nav-links a {
   text-decoration: none;
-  color: #94a3b8;
+  color: var(--texto-muted);
   font-size: 0.95rem;
   font-weight: 600;
   padding: 0.5rem 1rem;
@@ -64,7 +64,7 @@
 
 .app-content {
   min-height: calc(100vh - 65px);
-  background-color: #0b0f19;
+  background-color: var(--fondo-claro);
 }
 
 :host {
@@ -92,7 +92,7 @@ header {
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   padding: 1.5rem 2rem;
   text-align: center;
-  color: #64748b;
+  color: var(--texto-disabled);
   font-size: 0.85rem;
 }
 
@@ -126,5 +126,43 @@ header {
   .nav-links {
     width: 100%;
     justify-content: center;
+  }
+}
+
+@media (min-width: 1024px) {
+  :host {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "main"
+      "footer";
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  :host {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "main"
+      "footer";
+  }
+
+  .app-content {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 767px) {
+  :host {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "main"
+      "footer";
+  }
+
+  .app-content {
+    padding: 0 0.75rem;
   }
 }
