@@ -1,0 +1,22 @@
+<article class="card" tabindex="0" aria-label="Información de sala">
+  <img [src]="sala.imagen_url"
+       [alt]="'Imagen de ' + sala.nombre">
+
+  <h3>{{ sala.nombre }}</h3>
+  <p><strong>Capacidad:</strong> {{ sala.capacidad }}</p>
+  <p><strong>Piso:</strong> {{ sala.piso }}</p>
+  <p><strong>Edificio:</strong> {{ sala.edificio.nombre }}</p>
+
+  <section>
+    <h4>Horarios disponibles:</h4>
+    <ul>
+      <li *ngFor="let bloque of sala.bloques">
+        {{ bloque.hora_inicio }} - {{ bloque.hora_fin }}
+      </li>
+    </ul>
+  </section>
+
+  <button (click)="reservar()" aria-label="Reservar sala">
+    Reservar
+  </button>
+</article>
