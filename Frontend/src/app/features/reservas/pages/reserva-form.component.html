@@ -1,0 +1,168 @@
+<div class="form-container">
+  <header class="form-header">
+    <div class="header-overlay"></div>
+    <div class="header-content">
+      <h1>Nueva Reserva</h1>
+      <p>Completa los datos para reservar una sala de estudio</p>
+    </div>
+  </header>
+
+  <main class="form-main">
+    <form [formGroup]="reservaForm" (ngSubmit)="onSubmit()" novalidate class="reserva-form">
+
+      <section class="form-card" aria-labelledby="estudiante-heading">
+        <h2 id="estudiante-heading">Estudiante</h2>
+
+        <div class="buscador-estudiante" *ngIf="!estudianteSeleccionado">
+          <div class="form-field">
+            <label for="estudianteSearch">Buscar por RUT o Nombre</label>
+            <div class="input-row">
+              <input
+                id="estudianteSearch"
+                type="text"
+                formControlName="estudianteSearch"
+                placeholder="Ej: 12345678-5 o Juan Pérez"
+                (input)="buscarEstudiante()"
+                autocomplete="off"
+                aria-describedby="estudiante-hint"
+                tabindex="1">
+              <span *ngIf="buscandoEstudiantes" class="spinner-sm" aria-label="Buscando..." role="status"></span>
+            </div>
+            <span id="estudiante-hint" class="field-hint">Ingresa RUT (con guión) o nombre del estudiante</span>
+          </div>
+
+          <ul *ngIf="estudiantesEncontrados.length > 0" class="resultados-lista" role="listbox" aria-label="Resultados de búsqueda">
+            <li *ngFor="let est of estudiantesEncontrados; let i = index"
+                role="option"
+                [attr.aria-selected]="false"
+                (click)="seleccionarEstudiante(est)"
+                (keydown.enter)="seleccionarEstudiante(est)"
+                tabindex="0"
+                [attr.tabindex]="i + 1"
+                class="resultado-item">
+              <span class="resultado-nombre">{{ est.nombre }} {{ est.apellido }}</span>
+              <span class="resultado-rut">{{ est.rut }}</span>
+              <span class="resultado-correo">{{ est.correo }}</span>
+            </li>
+          </ul>
+
+          <div *ngIf="busquedaRealizada && estudiantesEncontrados.length === 0 && !buscandoEstudiantes" class="sin-resultados" role="status">
+            No se encontraron estudiantes con ese criterio.
+          </div>
+        </div>
+
+        <div *ngIf="estudianteSeleccionado" class="estudiante-seleccionado" aria-live="polite">
+          <div class="estudiante-info">
+            <span class="estudiante-avatar">{{ estudianteSeleccionado.nombre.charAt(0) }}{{ estudianteSeleccionado.apellido.charAt(0) }}</span>
+            <div>
+              <strong>{{ estudianteSeleccionado.nombre }} {{ estudianteSeleccionado.apellido }}</strong>
+              <span class="estudiante-detalle">{{ estudianteSeleccionado.rut }} — {{ estudianteSeleccionado.correo }}</span>
+            </div>
+          </div>
+          <button type="button" class="btn-quitar" (click)="quitarEstudiante()" aria-label="Quitar estudiante seleccionado" tabindex="0">&times;</button>
+        </div>
+
+        <p *ngIf="sinEstudiante" class="field-error" role="alert">Debes seleccionar un estudiante.</p>
+      </section>
+
+      <section class="form-card" aria-labelledby="fecha-heading">
+        <h2 id="fecha-heading">Fecha de Reserva</h2>
+        <div class="form-field">
+          <label for="fechaReserva">Fecha</label>
+          <input
+            type="date"
+            id="fechaReserva"
+            formControlName="fechaReserva"
+            class="date-picker"
+            tabindex="2">
+          <p *ngIf="fechaInvalida" class="field-error" role="alert">La fecha no puede ser anterior a hoy.</p>
+        </div>
+      </section>
+
+      <section class="form-card" aria-labelledby="sala-heading">
+        <h2 id="sala-heading">Sala de Estudio</h2>
+        <div class="form-field">
+          <label for="salaSelect">Sala</label>
+          <select
+            id="salaSelect"
+            formControlName="salaId"
+            (change)="onSalaChange()"
+            class="select-input"
+            tabindex="3">
+            <option value="" disabled>Selecciona una sala...</option>
+            <option *ngFor="let sala of salas" [value]="sala.id">
+              {{ sala.nombreSala }} ({{ sala.codigoSala }} — Cap. {{ sala.capacidad }})
+            </option>
+          </select>
+          <p *ngIf="submitted && reservaForm.get('salaId')?.errors?.required" class="field-error" role="alert">Debes seleccionar una sala.</p>
+        </div>
+      </section>
+
+      <section class="form-card" aria-labelledby="horario-heading">
+        <h2 id="horario-heading">Horario Disponible</h2>
+
+        <div *ngIf="cargandoHorarios" class="cargando-horarios" role="status">
+          <span class="spinner-sm"></span>
+          <span>Cargando horarios...</span>
+        </div>
+
+        <div *ngIf="!cargandoHorarios && horarios.length === 0 && reservaForm.get('salaId')?.value" class="sin-horarios" role="status">
+          No hay horarios disponibles para esta sala.
+        </div>
+
+        <div *ngIf="horarios.length > 0" class="horarios-grid" role="radiogroup" aria-label="Horarios disponibles">
+          <button
+            *ngFor="let h of horarios; let i = index"
+            type="button"
+            role="radio"
+            [attr.aria-checked]="reservaForm.get('horarioDisponibleId')?.value === h.id"
+            [class.selected]="reservaForm.get('horarioDisponibleId')?.value === h.id"
+            (click)="seleccionarHorario(h.id)"
+            [attr.tabindex]="i + 4"
+            class="horario-btn">
+            <span class="horario-hora">{{ h.horaInicio }}</span>
+            <span class="horario-sep">a</span>
+            <span class="horario-hora">{{ h.horaTermino }}</span>
+          </button>
+        </div>
+
+        <p *ngIf="submitted && reservaForm.get('horarioDisponibleId')?.errors?.required" class="field-error" role="alert">Debes seleccionar un horario.</p>
+      </section>
+
+      <section class="form-card" aria-labelledby="obs-heading">
+        <h2 id="obs-heading">Observaciones</h2>
+        <div class="form-field">
+          <label for="observacion">Observaciones</label>
+          <textarea
+            id="observacion"
+            formControlName="observacion"
+            rows="4"
+            placeholder="Describe el motivo de la reserva (mín. 15 caracteres)"
+            tabindex="8"
+            aria-describedby="obs-counter"></textarea>
+          <span id="obs-counter" class="field-hint">{{ reservaForm.get('observacion')?.value?.length || 0 }}/15 caracteres</span>
+          <p *ngIf="obsInvalida" class="field-error" role="alert">
+            {{ reservaForm.get('observacion')?.errors?.required ? 'La observación es obligatoria.' : 'La observación debe tener al menos 15 caracteres.' }}
+          </p>
+        </div>
+      </section>
+
+      <div *ngIf="errorConflicto" class="error-banner" role="alert" aria-live="assertive">
+        <span class="error-icon">&#9888;</span>
+        <span>{{ errorConflicto }}</span>
+      </div>
+
+      <div class="form-actions">
+        <a routerLink="/reservas" class="btn-cancel" tabindex="10">Cancelar</a>
+        <button
+          type="submit"
+          class="btn-submit"
+          [disabled]="submitting"
+          tabindex="9">
+          <span *ngIf="submitting" class="spinner-sm"></span>
+          {{ submitting ? 'Reservando...' : 'Reservar Sala' }}
+        </button>
+      </div>
+    </form>
+  </main>
+</div>
