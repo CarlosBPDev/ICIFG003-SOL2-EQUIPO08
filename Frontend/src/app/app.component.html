@@ -1,17 +1,23 @@
-<nav class="app-navbar">
-  <div class="nav-container">
-    <div class="nav-logo">
-      <span class="logo-icon">🎓</span>
-      <span class="logo-text">ReservaSalas</span>
+<header>
+  <nav class="app-navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <span class="logo-icon">🎓</span>
+        <span class="logo-text">ReservaSalas</span>
+      </div>
+      <div class="nav-links">
+        <a routerLink="/salas" routerLinkActive="active">Salas</a>
+        <a routerLink="/reservas" routerLinkActive="active">Reservas</a>
+        <a routerLink="/estudiantes" routerLinkActive="active">Estudiantes</a>
+      </div>
     </div>
-    <div class="nav-links">
-      <a routerLink="/salas" routerLinkActive="active">Salas</a>
-      <a routerLink="/reservas" routerLinkActive="active">Reservas</a>
-      <a routerLink="/estudiantes" routerLinkActive="active">Estudiantes</a>
-    </div>
-  </div>
-</nav>
+  </nav>
+</header>
 
-<div class="app-content">
+<main class="app-content">
   <router-outlet></router-outlet>
-</div>
+</main>
+
+<footer class="app-footer">
+  <p>&copy; 2026 S2_ATW — ReservaSalas</p>
+</footer>
