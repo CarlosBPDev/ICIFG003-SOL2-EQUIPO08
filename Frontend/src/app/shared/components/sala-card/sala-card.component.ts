@@ -1,8 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-sala-card',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './sala-card.component.html',
   styleUrls: ['./sala-card.component.css']
 })
