@@ -94,7 +94,7 @@
               {{ sala.nombreSala }} ({{ sala.codigoSala }} — Cap. {{ sala.capacidad }})
             </option>
           </select>
-          <p *ngIf="submitted && reservaForm.get('salaId')?.errors?.required" class="field-error" role="alert">Debes seleccionar una sala.</p>
+          <p *ngIf="submitted && reservaForm.get('salaId')?.errors?.['required']" class="field-error" role="alert">Debes seleccionar una sala.</p>
         </div>
       </section>
 
@@ -126,7 +126,7 @@
           </button>
         </div>
 
-        <p *ngIf="submitted && reservaForm.get('horarioDisponibleId')?.errors?.required" class="field-error" role="alert">Debes seleccionar un horario.</p>
+        <p *ngIf="submitted && reservaForm.get('horarioDisponibleId')?.errors?.['required']" class="field-error" role="alert">Debes seleccionar un horario.</p>
       </section>
 
       <section class="form-card" aria-labelledby="obs-heading">
@@ -142,7 +142,7 @@
             aria-describedby="obs-counter"></textarea>
           <span id="obs-counter" class="field-hint">{{ reservaForm.get('observacion')?.value?.length || 0 }}/15 caracteres</span>
           <p *ngIf="obsInvalida" class="field-error" role="alert">
-            {{ reservaForm.get('observacion')?.errors?.required ? 'La observación es obligatoria.' : 'La observación debe tener al menos 15 caracteres.' }}
+            {{ reservaForm.get('observacion')?.errors?.['required'] ? 'La observación es obligatoria.' : 'La observación debe tener al menos 15 caracteres.' }}
           </p>
         </div>
       </section>
