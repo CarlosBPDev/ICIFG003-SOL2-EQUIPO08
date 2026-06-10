@@ -29,12 +29,18 @@ CREATE DATABASE demo01;
 
    Se pueden sobrescribir vía variables de entorno `DB_USERNAME` y `DB_PASSWORD`.
 
+## PostgreSQL
+
+```bash
+sudo systemctl start postgresql
+```
+
 ## Levantar Backend
 
 ```bash
 cd Backend
-./mvnw clean package -DskipTests
-java -jar target/back-0.0.1-SNAPSHOT.jar
+sdk use java 17.0.11-tem
+./mvnw spring-boot:run
 ```
 
 El backend arranca en `http://localhost:6789/api`.
@@ -43,16 +49,15 @@ El backend arranca en `http://localhost:6789/api`.
 
 ## Poblar Base de Datos (Seed Data)
 
-**Importante:** El archivo `data.sql` en la raíz del proyecto corresponde a un schema **anterior y es incompatible** con las entidades actuales. No debe ejecutarse directamente.
-
-Para generar seed data compatible, se recomienda crear un `CommandLineRunner` en el backend o insertar manualmente registros que respeten la estructura actual de las tablas (ver columnas en las entidades JPA bajo `Backend/src/main/java/com/example/demo/entity/`).
+```bash
+sudo -u postgres psql -d demo01 -f data.sql
+```
 
 ## Levantar Frontend
 
 ```bash
 cd Frontend
-npm install
-ng serve
+npm start
 ```
 
 El frontend arranca en `http://localhost:4200`.
