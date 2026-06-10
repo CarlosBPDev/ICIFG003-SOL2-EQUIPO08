@@ -14,6 +14,8 @@ Backend Spring Boot + Frontend Angular 17.
 | PostgreSQL | 14+ |
 | Maven | 3.8+ (o usar `./mvnw`) |
 
+> El proyecto fue desarrollado y probado en un entorno con **Java 17 Temurin** y **Node.js 20**.
+
 ## Configuración de Base de Datos
 
 1. Crear base de datos PostgreSQL:
@@ -31,15 +33,16 @@ CREATE DATABASE demo01;
 
 ## PostgreSQL
 
-```bash
-sudo systemctl start postgresql
+En Windows, iniciar PostgreSQL desde el panel de servicios (Services.msc) o con:
+
+```batch
+net start postgresql-x64-17
 ```
 
 ## Levantar Backend
 
 ```bash
 cd Backend
-sdk use java 17.0.11-tem
 ./mvnw spring-boot:run
 ```
 
@@ -50,7 +53,7 @@ El backend arranca en `http://localhost:6789/api`.
 ## Poblar Base de Datos (Seed Data)
 
 ```bash
-sudo -u postgres psql -d demo01 -f data.sql
+psql -U postgres -d demo01 -f data.sql
 ```
 
 ## Levantar Frontend
