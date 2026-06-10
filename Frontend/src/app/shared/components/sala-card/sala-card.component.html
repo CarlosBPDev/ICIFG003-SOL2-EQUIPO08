@@ -1,22 +1,40 @@
-<article class="card" tabindex="0" aria-label="Información de sala">
-  <img [src]="sala.imagen_url"
-       [alt]="'Imagen de ' + sala.nombre">
+<article class="sala-card" tabindex="0" [attr.aria-label]="'Información de sala ' + sala.nombreSala">
+  <div class="sala-img-placeholder">
+    <span class="sala-img-code">{{ sala.codigoSala }}</span>
+  </div>
 
-  <h3>{{ sala.nombre }}</h3>
-  <p><strong>Capacidad:</strong> {{ sala.capacidad }}</p>
-  <p><strong>Piso:</strong> {{ sala.piso }}</p>
-  <p><strong>Edificio:</strong> {{ sala.edificio.nombre }}</p>
+  <div class="sala-card-body">
+    <h3>{{ sala.nombreSala }}</h3>
+    <p class="description">{{ sala.descripcion }}</p>
 
-  <section>
-    <h4>Horarios disponibles:</h4>
-    <ul>
-      <li *ngFor="let bloque of sala.bloques">
-        {{ bloque.hora_inicio }} - {{ bloque.hora_fin }}
-      </li>
-    </ul>
-  </section>
+    <div class="spec-list">
+      <div class="spec-item">
+        <span class="icon">👥</span>
+        <span>Capacidad: <strong>{{ sala.capacidad }} personas</strong></span>
+      </div>
+      <div class="spec-item">
+        <span class="icon">🏢</span>
+        <span>Edificio: <strong>{{ sala.edificio?.nombreEdificio || 'No especificado' }}</strong></span>
+      </div>
+      <div class="spec-item">
+        <span class="icon">📍</span>
+        <span>Piso: <strong>{{ sala.piso }}</strong></span>
+      </div>
+    </div>
 
-  <button (click)="reservar()" aria-label="Reservar sala">
-    Reservar
-  </button>
+    <section *ngIf="horarios.length > 0">
+      <h4>Horarios disponibles:</h4>
+      <ul>
+        <li *ngFor="let h of horarios">
+          {{ h.horaInicio | slice:0:5 }} - {{ h.horaTermino | slice:0:5 }}
+        </li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="sala-card-footer">
+    <button class="btn-reserva" (click)="reservar()" [attr.aria-label]="'Reservar sala ' + sala.nombreSala">
+      Reservar Sala
+    </button>
+  </div>
 </article>

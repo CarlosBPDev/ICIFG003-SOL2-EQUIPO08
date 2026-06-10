@@ -14,4 +14,7 @@ public interface EstudianteRepository extends JpaRepository<EstudianteEntity, Lo
 
     @Query("SELECT e FROM EstudianteEntity e WHERE e.rut = :rut OR (e.nombre = :nombre AND e.apellido = :apellido)")
     List<EstudianteEntity> findByRutOrNombreAndApellido(@Param("rut") String rut, @Param("nombre") String nombre, @Param("apellido") String apellido);
+
+    @Query("SELECT e FROM EstudianteEntity e WHERE e.correo = :correo")
+    List<EstudianteEntity> findByCorreo(@Param("correo") String correo);
 }

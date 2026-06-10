@@ -49,6 +49,8 @@ public class ReservaService {
         List<ReservaEntity> reservas;
         if (salaId != null && fecha != null) {
             reservas = reservaRepository.findBySalaAndFecha(salaId, fecha);
+        } else if (fecha != null) {
+            reservas = reservaRepository.findByFecha(fecha);
         } else {
             reservas = reservaRepository.findAll();
         }

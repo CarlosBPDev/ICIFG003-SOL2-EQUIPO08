@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { SalaService } from '../../../services/sala.service';
 import { ReservaService } from '../../../services/reserva.service';
+import { HorarioService } from '../../../services/horario.service';
+import { SalaCardComponent } from '../../../shared/components/sala-card/sala-card.component';
 import { SalaResponseDTO, ReservaResponseDTO } from '../../../models';
 
 @Component({
   selector: 'app-salas',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SalaCardComponent],
   templateUrl: './salas.component.html',
   styleUrls: ['./salas.component.css']
 })
@@ -17,15 +20,16 @@ export class SalasComponent implements OnInit {
   filteredSalas: SalaResponseDTO[] = [];
   reservations: ReservaResponseDTO[] = [];
 
-  // Filtros
-  capacidadFilter: string = 'all'; // 'all', '4', '8', 'more'
-  fechaFilter: string = ''; // YYYY-MM-DD
+  capacidadFilter: string = 'all';
+  fechaFilter: string = '';
 
   loading: boolean = false;
 
   constructor(
     private salaService: SalaService,
-    private reservaService: ReservaService
+    private reservaService: ReservaService,
+    private horarioService: HorarioService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -37,6 +41,7 @@ export class SalasComponent implements OnInit {
     this.salaService.getSalas().subscribe({
       next: (data) => {
         this.salas = data;
+        this.loadHorarios();
         this.applyFilters();
         this.loading = false;
       },
@@ -44,6 +49,17 @@ export class SalasComponent implements OnInit {
         console.error('Error al cargar salas:', err);
         this.loading = false;
       }
+    });
+  }
+
+  loadHorarios(): void {
+    this.salas.forEach(sala => {
+      this.horarioService.getHorarios(sala.id).subscribe({
+        next: (horarios) => {
+          sala.horarios = horarios;
+        },
+        error: () => {}
+      });
     });
   }
 
@@ -70,7 +86,6 @@ export class SalasComponent implements OnInit {
   applyFilters(): void {
     let result = [...this.salas];
 
-    // Filtro de Capacidad
     if (this.capacidadFilter === '4') {
       result = result.filter(s => s.capacidad <= 4);
     } else if (this.capacidadFilter === '8') {
@@ -89,5 +104,9 @@ export class SalasComponent implements OnInit {
 
   getReservasForSala(salaId: number): ReservaResponseDTO[] {
     return this.reservations.filter(r => r.sala && r.sala.id === salaId);
+  }
+
+  reservarSala(salaId: number): void {
+    this.router.navigate(['/reservas/nueva'], { queryParams: { salaId } });
   }
 }

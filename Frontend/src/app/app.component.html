@@ -1,14 +1,14 @@
-<header>
+<header *ngIf="authService.isLoggedIn()">
   <nav class="app-navbar">
     <div class="nav-container">
       <div class="nav-logo">
-        <span class="logo-icon">🎓</span>
+        <span class="logo-icon" aria-hidden="true">🎓</span>
         <span class="logo-text">ReservaSalas</span>
       </div>
-      <div class="nav-links">
-        <a routerLink="/salas" routerLinkActive="active">Salas</a>
-        <a routerLink="/reservas" routerLinkActive="active">Reservas</a>
-        <a routerLink="/estudiantes" routerLinkActive="active">Estudiantes</a>
+      <app-menu></app-menu>
+      <div class="nav-user" *ngIf="authService.currentUser">
+        <span class="user-name">{{ authService.currentUser.nombre }} {{ authService.currentUser.apellido }}</span>
+        <button class="btn-logout" (click)="logout()" aria-label="Cerrar sesión">Cerrar Sesión</button>
       </div>
     </div>
   </nav>
@@ -18,6 +18,6 @@
   <router-outlet></router-outlet>
 </main>
 
-<footer class="app-footer">
+<footer class="app-footer" *ngIf="authService.isLoggedIn()">
   <p>&copy; 2026 S2_ATW — ReservaSalas</p>
 </footer>

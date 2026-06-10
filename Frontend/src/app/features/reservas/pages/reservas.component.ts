@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { SalaService } from '../../../services/sala.service';
 import { ReservaService } from '../../../services/reserva.service';
 import { SalaResponseDTO, ReservaResponseDTO } from '../../../models';
@@ -24,10 +25,18 @@ export class ReservasComponent implements OnInit {
 
   constructor(
     private salaService: SalaService,
-    private reservaService: ReservaService
+    private reservaService: ReservaService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['salaId'] && params['fecha']) {
+        this.selectedSalaId = Number(params['salaId']);
+        this.selectedFecha = params['fecha'];
+        this.loadReservas();
+      }
+    });
     this.loadSalas();
   }
 

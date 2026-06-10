@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { SalaResponseDTO, HorarioDisponibleResponseDTO } from '../../../models';
 
 @Component({
   selector: 'app-sala-card',
@@ -10,11 +11,12 @@ import { Router, RouterModule } from '@angular/router';
   styleUrls: ['./sala-card.component.css']
 })
 export class SalaCardComponent {
-  @Input() sala: any;
+  @Input() sala!: SalaResponseDTO;
+  @Input() horarios: HorarioDisponibleResponseDTO[] = [];
 
   constructor(private router: Router) {}
 
   reservar() {
-    this.router.navigate(['/reserva', this.sala.id]);
+    this.router.navigate(['/reservas/nueva'], { queryParams: { salaId: this.sala.id } });
   }
 }

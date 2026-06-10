@@ -18,6 +18,10 @@ public interface ReservaRepository extends JpaRepository<ReservaEntity, Long> {
     List<ReservaEntity> findBySalaAndFecha(@Param("salaId") Long salaId,
                                            @Param("fecha") LocalDate fecha);
 
+    @Query(value = "SELECT * FROM reserva WHERE fecha_reserva = :fecha",
+           nativeQuery = true)
+    List<ReservaEntity> findByFecha(@Param("fecha") LocalDate fecha);
+
     @Query("SELECT r FROM ReservaEntity r " +
            "WHERE r.sala.id = :salaId " +
            "AND r.horarioDisponible.id = :horarioId " +

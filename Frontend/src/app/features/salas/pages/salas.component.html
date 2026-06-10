@@ -7,106 +7,106 @@
     </div>
   </header>
 
-  <main class="salas-main">
-    <!-- Panel de Filtros -->
-    <section class="filters-card">
-      <h2>Filtros de Búsqueda</h2>
-      
-      <div class="filters-grid">
-        <!-- Filtro Capacidad -->
-        <div class="filter-group">
-          <label>Capacidad de Sala</label>
-          <div class="radio-buttons">
-            <label class="radio-btn" [class.active]="capacidadFilter === 'all'">
-              <input type="radio" name="capacidad" value="all" [(ngModel)]="capacidadFilter" (ngModelChange)="onFilterChange()">
-              Todas
-            </label>
-            <label class="radio-btn" [class.active]="capacidadFilter === '4'">
-              <input type="radio" name="capacidad" value="4" [(ngModel)]="capacidadFilter" (ngModelChange)="onFilterChange()">
-              Hasta 4 personas
-            </label>
-            <label class="radio-btn" [class.active]="capacidadFilter === '8'">
-              <input type="radio" name="capacidad" value="8" [(ngModel)]="capacidadFilter" (ngModelChange)="onFilterChange()">
-              Hasta 8 personas
-            </label>
-            <label class="radio-btn" [class.active]="capacidadFilter === 'more'">
-              <input type="radio" name="capacidad" value="more" [(ngModel)]="capacidadFilter" (ngModelChange)="onFilterChange()">
-              Más de 8 personas
-            </label>
+  <main class="salas-main-layout">
+    <div class="salas-content">
+      <section class="filters-card">
+        <h2>Filtros de Búsqueda</h2>
+        
+        <div class="filters-grid">
+          <div class="filter-group">
+            <label for="capacidadFilter">Capacidad de Sala</label>
+            <div class="radio-buttons" id="capacidadFilter">
+              <label class="radio-btn" [class.active]="capacidadFilter === 'all'">
+                <input type="radio" name="capacidad" value="all" [(ngModel)]="capacidadFilter" (ngModelChange)="onFilterChange()">
+                Todas
+              </label>
+              <label class="radio-btn" [class.active]="capacidadFilter === '4'">
+                <input type="radio" name="capacidad" value="4" [(ngModel)]="capacidadFilter" (ngModelChange)="onFilterChange()">
+                Hasta 4 personas
+              </label>
+              <label class="radio-btn" [class.active]="capacidadFilter === '8'">
+                <input type="radio" name="capacidad" value="8" [(ngModel)]="capacidadFilter" (ngModelChange)="onFilterChange()">
+                Hasta 8 personas
+              </label>
+              <label class="radio-btn" [class.active]="capacidadFilter === 'more'">
+                <input type="radio" name="capacidad" value="more" [(ngModel)]="capacidadFilter" (ngModelChange)="onFilterChange()">
+                Más de 8 personas
+              </label>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label for="fechaFilter">Disponibilidad por Fecha</label>
+            <div class="date-input-wrapper">
+              <input type="date" id="fechaFilter" [(ngModel)]="fechaFilter" (ngModelChange)="onFilterChange()" class="date-picker" aria-label="Seleccionar fecha">
+            </div>
           </div>
         </div>
+      </section>
 
-        <!-- Filtro Fecha -->
-        <div class="filter-group">
-          <label for="fechaFilter">Disponibilidad por Fecha</label>
-          <div class="date-input-wrapper">
-            <input type="date" id="fechaFilter" [(ngModel)]="fechaFilter" (ngModelChange)="onFilterChange()" class="date-picker">
-          </div>
+      <section class="salas-list-section">
+        <div class="section-header">
+          <h3>Salas Disponibles ({{ filteredSalas.length }})</h3>
+          <div *ngIf="loading" class="spinner" role="status" aria-label="Cargando"></div>
         </div>
-      </div>
-    </section>
 
-    <!-- Listado de Salas -->
-    <section class="salas-list-section">
-      <div class="section-header">
-        <h3>Salas Disponibles ({{ filteredSalas.length }})</h3>
-        <div *ngIf="loading" class="spinner"></div>
-      </div>
+        <div class="salas-grid" *ngIf="filteredSalas.length > 0; else noSalas">
+          <app-sala-card
+            *ngFor="let sala of filteredSalas"
+            [sala]="sala"
+            [horarios]="sala.horarios || []"
+          ></app-sala-card>
+        </div>
 
-      <div class="salas-grid" *ngIf="filteredSalas.length > 0; else noSalas">
-        <div class="sala-card" *ngFor="let sala of filteredSalas" [class.reservada]="isSalaReservada(sala.id)">
-          <div class="sala-card-header">
-            <span class="sala-code">{{ sala.codigoSala }}</span>
-            <span class="status-badge" [class.active]="!isSalaReservada(sala.id)" [class.busy]="isSalaReservada(sala.id)">
-              {{ isSalaReservada(sala.id) ? 'Ocupada' : 'Libre' }}
+        <ng-template #noSalas>
+          <div class="empty-state">
+            <span class="empty-icon">📂</span>
+            <p>No se encontraron salas con los filtros aplicados.</p>
+          </div>
+        </ng-template>
+      </section>
+
+      <section class="reservations-section" *ngIf="fechaFilter">
+        <div class="section-header">
+          <h3>Reservas del {{ fechaFilter }}</h3>
+          <span class="reservations-count">{{ reservations.length }} reserva(s)</span>
+        </div>
+        <div class="reservations-list" *ngIf="reservations.length > 0; else noReservas">
+          <div class="reservation-item" *ngFor="let r of reservations">
+            <span class="reserva-sala">{{ r.sala?.codigoSala || 'N/A' }}</span>
+            <span class="reserva-horario">{{ r.horarioDisponible?.horaInicio | slice:0:5 }} - {{ r.horarioDisponible?.horaTermino | slice:0:5 }}</span>
+            <span class="reserva-estudiante">{{ r.estudiante?.nombre }} {{ r.estudiante?.apellido }}</span>
+            <span class="reserva-estado" [class.confirmada]="r.estadoReserva?.id === 1" [class.cancelada]="r.estadoReserva?.id === 2">
+              {{ r.estadoReserva?.nombreEstado || 'N/A' }}
             </span>
           </div>
-
-          <div class="sala-card-body">
-            <h4>{{ sala.nombreSala }}</h4>
-            <p class="description">{{ sala.descripcion }}</p>
-
-            <div class="spec-list">
-              <div class="spec-item">
-                <span class="icon">👥</span>
-                <span>Capacidad: <strong>{{ sala.capacidad }} personas</strong></span>
-              </div>
-              <div class="spec-item">
-                <span class="icon">🏢</span>
-                <span>Edificio: <strong>{{ sala.edificio?.nombreEdificio || 'No especificado' }}</strong></span>
-              </div>
-              <div class="spec-item">
-                <span class="icon">📍</span>
-                <span>Piso: <strong>{{ sala.piso }}</strong></span>
-              </div>
-            </div>
-
-            <!-- Reservas activas si hay fecha seleccionada -->
-            <div class="reservations-indicator" *ngIf="fechaFilter && getReservasForSala(sala.id).length > 0">
-              <h5>Reservas del día:</h5>
-              <ul>
-                <li *ngFor="let r of getReservasForSala(sala.id)">
-                  ⏰ {{ r.horarioDisponible?.horaInicio || 'N/A' }} - {{ r.horarioDisponible?.horaTermino || 'N/A' }} 
-                  <span class="student-name">({{ r.estudiante?.nombre }} {{ r.estudiante?.apellido }})</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="sala-card-footer">
-            <button class="btn-reserva" [disabled]="sala.estado === 'Mantenimiento'">
-              {{ sala.estado === 'Mantenimiento' ? 'En Mantenimiento' : 'Reservar Sala' }}
-            </button>
-          </div>
         </div>
+        <ng-template #noReservas>
+          <div class="empty-state small">
+            <p>No hay reservas para esta fecha.</p>
+          </div>
+        </ng-template>
+      </section>
+    </div>
+
+    <aside class="salas-sidebar">
+      <h2>Avisos Importantes</h2>
+      <div class="aviso-card">
+        <span class="aviso-icon">📢</span>
+        <p>Las reservas deben realizarse con al menos un día de anticipación.</p>
       </div>
-
-      <ng-template #noSalas>
-        <div class="empty-state">
-          <span class="empty-icon">📂</span>
-          <p>No se encontraron salas con los filtros aplicados.</p>
-        </div>
-      </ng-template>
-    </section>
+      <div class="aviso-card">
+        <span class="aviso-icon">⏰</span>
+        <p>El uso máximo por sala es de 4 horas consecutivas por estudiante.</p>
+      </div>
+      <div class="aviso-card">
+        <span class="aviso-icon">🧹</span>
+        <p>Mantén el orden y limpieza de las salas después de su uso.</p>
+      </div>
+      <div class="aviso-card">
+        <span class="aviso-icon">📞</span>
+        <p>Para incidentes, contacta a la biblioteca al anexo 1234.</p>
+      </div>
+    </aside>
   </main>
 </div>

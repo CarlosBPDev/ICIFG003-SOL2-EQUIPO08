@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { MensajeComponent } from '../../../shared/components/mensaje/mensaje.component';
+import { AuthService } from '../../../services/auth.service';
 import { EstudianteService } from '../../../services/estudiante.service';
 import { SalaService } from '../../../services/sala.service';
 import { HorarioService } from '../../../services/horario.service';
@@ -37,13 +38,17 @@ export class ReservaFormComponent implements OnInit {
   submitted = false;
   busquedaRealizada = false;
 
+  private salaIdPreseleccionada: number | null = null;
+
   constructor(
     private fb: FormBuilder,
+    private authService: AuthService,
     private estudianteService: EstudianteService,
     private salaService: SalaService,
     private horarioService: HorarioService,
     private reservaService: ReservaService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.reservaForm = this.fb.group({
       estudianteSearch: [''],
@@ -55,12 +60,27 @@ export class ReservaFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['salaId']) {
+        this.salaIdPreseleccionada = Number(params['salaId']);
+      }
+    });
     this.loadSalas();
+    const user = this.authService.currentUser;
+    if (user) {
+      this.seleccionarEstudiante(user);
+    }
   }
 
   loadSalas(): void {
     this.salaService.getSalas().subscribe({
-      next: (data) => { this.salas = data; },
+      next: (data) => {
+        this.salas = data;
+        if (this.salaIdPreseleccionada) {
+          this.reservaForm.get('salaId')?.setValue(this.salaIdPreseleccionada);
+          this.onSalaChange();
+        }
+      },
       error: (err) => { console.error('Error al cargar salas:', err); }
     });
   }
@@ -137,6 +157,17 @@ export class ReservaFormComponent implements OnInit {
     const formValue = this.reservaForm.value;
     this.submitting = true;
 
+    const params = {
+      salaId: formValue.salaId,
+      fecha: formValue.fechaReserva
+    };
+
+    if (this.estudianteSeleccionado.id === 0) {
+      this.submitting = false;
+      this.router.navigate(['/reservas'], { queryParams: params });
+      return;
+    }
+
     this.reservaService.crearReserva({
       fechaReserva: formValue.fechaReserva,
       observacion: formValue.observacion.trim(),
@@ -147,7 +178,7 @@ export class ReservaFormComponent implements OnInit {
     }).subscribe({
       next: () => {
         this.submitting = false;
-        this.router.navigate(['/reservas']);
+        this.router.navigate(['/reservas'], { queryParams: params });
       },
       error: (err) => {
         this.submitting = false;

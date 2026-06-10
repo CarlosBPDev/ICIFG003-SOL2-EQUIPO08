@@ -25,8 +25,12 @@ public class EstudianteController {
     public List<EstudianteResponseDTO> buscarEstudiantes(
             @RequestParam(value = "rut", required = false) String rut,
             @RequestParam(value = "nombre", required = false) String nombre,
-            @RequestParam(value = "apellido", required = false) String apellido) {
-        
+            @RequestParam(value = "apellido", required = false) String apellido,
+            @RequestParam(value = "correo", required = false) String correo) {
+
+        if (correo != null) {
+            return estudianteRepository.findByCorreo(correo).stream().map(this::convertToDTO).collect(Collectors.toList());
+        }
         List<EstudianteEntity> estudiantes = estudianteRepository.findByRutOrNombreAndApellido(rut, nombre, apellido);
         return estudiantes.stream().map(this::convertToDTO).collect(Collectors.toList());
     }

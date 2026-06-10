@@ -10,10 +10,9 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent {
-
   links = [
-    { label: 'Inicio', path: '/' },
     { label: 'Salas', path: '/salas' },
-    { label: 'Mis Reservas', path: '/reservas' }
+    { label: 'Reservas', path: '/reservas' },
+    { label: 'Estudiantes', path: '/estudiantes' }
   ];
 }

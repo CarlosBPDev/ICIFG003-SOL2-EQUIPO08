@@ -99,3 +99,11 @@ INSERT INTO reserva (id, fecha_reserva, observacion, fecha_creacion, estudiante_
 (13, '2026-06-07', NULL, '2026-06-07T08:00:00', 3,  5, 15, 2),
 (14, '2026-06-07', NULL, '2026-06-07T08:00:00', 4,  6, 17, 1),
 (15, '2026-06-08', NULL, '2026-06-08T08:00:00', 5,  7, 21, 1);
+
+-- Sincronizar secuencias después de inserts con IDs explícitos
+SELECT setval('reserva_id_seq', COALESCE((SELECT MAX(id) FROM reserva), 1));
+SELECT setval('estudiante_id_seq', COALESCE((SELECT MAX(id) FROM estudiante), 1));
+SELECT setval('sala_id_seq', COALESCE((SELECT MAX(id) FROM sala), 1));
+SELECT setval('horario_disponible_id_seq', COALESCE((SELECT MAX(id) FROM horario_disponible), 1));
+SELECT setval('carrera_id_seq', COALESCE((SELECT MAX(id) FROM carrera), 1));
+SELECT setval('edificio_id_seq', COALESCE((SELECT MAX(id) FROM edificio), 1));

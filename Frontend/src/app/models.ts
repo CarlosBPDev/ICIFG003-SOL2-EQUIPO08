@@ -41,6 +41,7 @@ export interface SalaResponseDTO {
   descripcion: string;
   estado: string;
   edificio?: EdificioResponseDTO;
+  horarios?: HorarioDisponibleResponseDTO[];
 }
 
 export interface ReservaRequestDTO {
