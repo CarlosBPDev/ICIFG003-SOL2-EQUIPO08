@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +15,6 @@ public class EstudianteResponseDTO {
     private String apellido;
     private String correo;
     private String telefono;
-    private LocalDateTime fechaRegistro;
+    private LocalDate fechaRegistro;
     private CarreraResponseDTO carrera;
 }

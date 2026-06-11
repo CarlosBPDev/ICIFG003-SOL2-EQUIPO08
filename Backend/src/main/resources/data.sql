@@ -12,16 +12,16 @@ INSERT INTO carrera (id, nombre_carrera, facultad) VALUES
 -- ESTUDIANTES (10)
 -- =========================
 INSERT INTO estudiante (id, rut, nombre, apellido, correo, telefono, fecha_registro, id_carrera) VALUES
-(1, '11111111-1', 'Juan', 'Pérez', 'juan@uni.cl', '912345678', '2026-01-15T10:00:00', 1),
-(2, '22222222-2', 'María', 'González', 'maria@uni.cl', '912345679', '2026-01-15T10:00:00', 2),
-(3, '33333333-3', 'Pedro', 'Rojas', 'pedro@uni.cl', '912345680', '2026-01-15T10:00:00', 3),
-(4, '44444444-4', 'Ana', 'Torres', 'ana@uni.cl', '912345681', '2026-01-15T10:00:00', 4),
-(5, '55555555-5', 'Luis', 'Martínez', 'luis@uni.cl', '912345682', '2026-01-15T10:00:00', 5),
-(6, '66666666-6', 'Camila', 'Soto', 'camila@uni.cl', '912345683', '2026-01-15T10:00:00', 1),
-(7, '77777777-7', 'Diego', 'Morales', 'diego@uni.cl', '912345684', '2026-01-15T10:00:00', 2),
-(8, '88888888-8', 'Valentina', 'Castro', 'vale@uni.cl', '912345685', '2026-01-15T10:00:00', 3),
-(9, '99999999-9', 'Andrés', 'Silva', 'andres@uni.cl', '912345686', '2026-01-15T10:00:00', 4),
-(10, '10101010-1', 'Fernanda', 'Díaz', 'fernanda@uni.cl', '912345687', '2026-01-15T10:00:00', 5);
+(1, '11111111-1', 'Juan', 'Pérez', 'juan@uni.cl', '912345678', '2026-01-15', 1),
+(2, '22222222-2', 'María', 'González', 'maria@uni.cl', '912345679', '2026-01-15', 2),
+(3, '33333333-3', 'Pedro', 'Rojas', 'pedro@uni.cl', '912345680', '2026-01-15', 3),
+(4, '44444444-4', 'Ana', 'Torres', 'ana@uni.cl', '912345681', '2026-01-15', 4),
+(5, '55555555-5', 'Luis', 'Martínez', 'luis@uni.cl', '912345682', '2026-01-15', 5),
+(6, '66666666-6', 'Camila', 'Soto', 'camila@uni.cl', '912345683', '2026-01-15', 1),
+(7, '77777777-7', 'Diego', 'Morales', 'diego@uni.cl', '912345684', '2026-01-15', 2),
+(8, '88888888-8', 'Valentina', 'Castro', 'vale@uni.cl', '912345685', '2026-01-15', 3),
+(9, '99999999-9', 'Andrés', 'Silva', 'andres@uni.cl', '912345686', '2026-01-15', 4),
+(10, '10101010-1', 'Fernanda', 'Díaz', 'fernanda@uni.cl', '912345687', '2026-01-15', 5);
 
 -- =========================
 -- EDIFICIOS (3)

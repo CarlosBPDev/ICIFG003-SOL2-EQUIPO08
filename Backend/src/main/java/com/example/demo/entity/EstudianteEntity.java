@@ -1,6 +1,6 @@
 package com.example.demo.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +59,7 @@ public class EstudianteEntity {
     @NotNull
     @Column(name = "fecha_registro", nullable = false, updatable = false)
     @CreationTimestamp
-    private LocalDateTime fechaRegistro;
+    private LocalDate fechaRegistro;
 
     @ManyToOne
     @JoinColumn(name = "id_carrera")
