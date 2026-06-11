@@ -14,7 +14,7 @@
         
         <div class="filters-grid">
           <div class="filter-group">
-            <label for="capacidadFilter">Capacidad de Sala</label>
+            <label for="capacidadFilter" class="form-label">Capacidad de Sala</label>
             <div class="radio-buttons" id="capacidadFilter">
               <label class="radio-btn" [class.active]="capacidadFilter === 'all'">
                 <input type="radio" name="capacidad" value="all" [(ngModel)]="capacidadFilter" (ngModelChange)="onFilterChange()">
@@ -36,9 +36,9 @@
           </div>
 
           <div class="filter-group">
-            <label for="fechaFilter">Disponibilidad por Fecha</label>
+            <label for="fechaFilter" class="form-label">Disponibilidad por Fecha</label>
             <div class="date-input-wrapper">
-              <input type="date" id="fechaFilter" [(ngModel)]="fechaFilter" (ngModelChange)="onFilterChange()" class="date-picker" aria-label="Seleccionar fecha">
+              <input type="date" id="fechaFilter" [(ngModel)]="fechaFilter" (ngModelChange)="onFilterChange()" class="form-control date-picker" aria-label="Seleccionar fecha">
             </div>
           </div>
         </div>
@@ -60,7 +60,7 @@
 
         <ng-template #noSalas>
           <div class="empty-state">
-            <span class="empty-icon">📂</span>
+            <span class="empty-icon"><i class="fas fa-folder-open"></i></span>
             <p>No se encontraron salas con los filtros aplicados.</p>
           </div>
         </ng-template>
@@ -91,21 +91,21 @@
 
     <aside class="salas-sidebar">
       <h2>Avisos Importantes</h2>
-      <div class="aviso-card">
-        <span class="aviso-icon">📢</span>
-        <p>Las reservas deben realizarse con al menos un día de anticipación.</p>
+      <div class="aviso-card d-flex align-items-start gap-3">
+        <span class="aviso-icon"><i class="fas fa-bullhorn"></i></span>
+        <p class="mb-0">Las reservas deben realizarse con al menos un día de anticipación.</p>
       </div>
-      <div class="aviso-card">
-        <span class="aviso-icon">⏰</span>
-        <p>El uso máximo por sala es de 4 horas consecutivas por estudiante.</p>
+      <div class="aviso-card d-flex align-items-start gap-3">
+        <span class="aviso-icon"><i class="fas fa-clock"></i></span>
+        <p class="mb-0">El uso máximo por sala es de 4 horas consecutivas por estudiante.</p>
       </div>
-      <div class="aviso-card">
-        <span class="aviso-icon">🧹</span>
-        <p>Mantén el orden y limpieza de las salas después de su uso.</p>
+      <div class="aviso-card d-flex align-items-start gap-3">
+        <span class="aviso-icon"><i class="fas fa-broom"></i></span>
+        <p class="mb-0">Mantén el orden y limpieza de las salas después de su uso.</p>
       </div>
-      <div class="aviso-card">
-        <span class="aviso-icon">📞</span>
-        <p>Para incidentes, contacta a la biblioteca al anexo 1234.</p>
+      <div class="aviso-card d-flex align-items-start gap-3">
+        <span class="aviso-icon"><i class="fas fa-phone"></i></span>
+        <p class="mb-0">Para incidentes, contacta a la biblioteca al anexo 1234.</p>
       </div>
     </aside>
   </main>

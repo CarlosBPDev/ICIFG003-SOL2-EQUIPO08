@@ -15,7 +15,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "recurso")
@@ -35,5 +37,7 @@ public class RecursoEntity {
 
     @ManyToMany(mappedBy = "recursos")
     @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<SalaEntity> salas = new HashSet<>();
 }

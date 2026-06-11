@@ -1,0 +1,104 @@
+<div class="home-container">
+  <section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Biblioteca Central<br><span class="hero-highlight">Universidad San Sebastián</span></h1>
+      <p class="hero-subtitle">
+        Un espacio diseñado para el conocimiento, la investigación y el aprendizaje colaborativo.
+        Accede a nuestras salas de estudio, recursos digitales y servicios bibliotecarios.
+      </p>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number">+15</span>
+          <span class="stat-label">Salas de Estudio</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">+50</span>
+          <span class="stat-label">Espacios Individuales</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">+2.000</span>
+          <span class="stat-label">Usuarios Activos</span>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <a routerLink="/salas" class="btn-primary">Explorar Salas</a>
+        <a routerLink="/register" class="btn-secondary">Registrarse</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="home-main-layout">
+    <div class="home-content">
+      <section class="info-section">
+        <h2>Información General</h2>
+        <div class="info-grid">
+          <div class="info-card">
+            <span class="info-icon"><i class="fas fa-clock"></i></span>
+            <h3>Horarios de Atención</h3>
+            <p><strong>Lunes a Viernes:</strong> 8:00 - 21:00</p>
+            <p><strong>Sábados:</strong> 9:00 - 18:00</p>
+            <p><strong>Domingos:</strong> Cerrado</p>
+          </div>
+          <div class="info-card">
+            <span class="info-icon"><i class="fas fa-location-dot"></i></span>
+            <h3>Ubicación</h3>
+            <p>Av. del Libertador 1.500</p>
+            <p>Edificio Central, Piso 2</p>
+            <p>Santiago, Chile</p>
+          </div>
+          <div class="info-card">
+            <span class="info-icon"><i class="fas fa-book-open"></i></span>
+            <h3>Servicios</h3>
+            <p>Préstamo de libros</p>
+            <p>Sala de computación</p>
+            <p>Hemeroteca y archivo digital</p>
+          </div>
+          <div class="info-card">
+            <span class="info-icon"><i class="fas fa-graduation-cap"></i></span>
+            <h3>Beneficios</h3>
+            <p>Acceso a bases de datos académicas</p>
+            <p>Tutorías y apoyo académico</p>
+            <p>Espacios de estudio 24/7 en época de exámenes</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="salas-preview-section">
+        <div class="section-header">
+          <h2>Salas de Estudio Disponibles</h2>
+          <a routerLink="/salas" class="section-link">Ver todas las salas →</a>
+        </div>
+        <div class="salas-preview-grid">
+          <article class="sala-preview-card" *ngFor="let sala of salasPreview">
+            <div class="sala-preview-img">
+              <span class="sala-preview-code">{{ sala.codigo }}</span>
+            </div>
+            <div class="sala-preview-body">
+              <h3>{{ sala.nombre }}</h3>
+              <p>{{ sala.descripcion }}</p>
+              <div class="sala-preview-specs">
+                <span class="spec-badge"><i class="fas fa-users me-1"></i>{{ sala.capacidad }} {{ sala.capacidad === 1 ? 'persona' : 'personas' }}</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <aside class="home-sidebar">
+      <h2>Avisos Importantes</h2>
+      <div class="aviso-card d-flex align-items-start gap-3" *ngFor="let aviso of avisos">
+        <span class="aviso-icon"><i class="{{ aviso.icono }}"></i></span>
+        <p class="mb-0">{{ aviso.texto }}</p>
+      </div>
+
+      <div class="contact-card">
+        <h3>Contacto</h3>
+        <p><strong>Teléfono:</strong> +56 2 2678 9000</p>
+        <p><strong>Email:</strong> biblioteca&#64;uss.cl</p>
+        <p><strong>Anexo:</strong> 1234</p>
+      </div>
+    </aside>
+  </div>
+</div>

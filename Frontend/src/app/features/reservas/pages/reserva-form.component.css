@@ -42,7 +42,7 @@
   font-size: 2.5rem;
   font-weight: 800;
   margin: 0 0 0.5rem 0;
-  background: linear-gradient(135deg, #6366f1, #a855f7);
+  background: var(--gradient-header);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -67,6 +67,11 @@
   padding: 2rem;
   border: 1px solid var(--borde-sutil);
   box-shadow: var(--sombra-card);
+  transition: box-shadow 0.3s ease;
+}
+
+.form-card:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
 }
 
 .form-card h2 {
@@ -76,6 +81,67 @@
   color: var(--texto-secundario);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+.form-card h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.75rem 0;
+  color: var(--texto-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.form-tips {
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-tips h3 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem 0;
+  color: #a78bfa;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.form-tips ul {
+  margin: 0;
+  padding: 0 0 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-tips li {
+  font-size: 0.82rem;
+  color: var(--texto-muted);
+  line-height: 1.4;
+}
+
+.form-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 1rem;
+  margin-top: 0.5rem;
+}
+
+.form-footer p {
+  font-size: 0.75rem;
+  color: var(--texto-disabled);
+  margin: 0;
+  text-align: center;
+}
+
+article {
+  display: contents;
+}
+
+nav {
+  display: contents;
 }
 
 .form-field {
@@ -410,7 +476,7 @@
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
-  background: linear-gradient(135deg, var(--color-primario), #4f46e5);
+  background: var(--gradient-primario);
   color: #ffffff;
   box-shadow: var(--sombra-primario);
   transition: all 0.25s ease;
@@ -458,8 +524,33 @@
     padding: 1.25rem;
   }
 
+  .form-card h3 {
+    font-size: 0.8rem;
+    margin: 1rem 0 0.5rem 0;
+  }
+
   .horarios-grid {
     grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  }
+
+  .form-tips {
+    padding: 1rem;
+  }
+
+  .form-tips ul {
+    gap: 0.35rem;
+  }
+
+  .form-tips li {
+    font-size: 0.78rem;
+  }
+
+  .form-footer {
+    padding-top: 0.75rem;
+  }
+
+  .form-footer p {
+    font-size: 0.7rem;
   }
 
   .form-actions {

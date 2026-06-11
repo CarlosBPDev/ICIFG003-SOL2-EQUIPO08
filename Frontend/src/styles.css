@@ -9,7 +9,7 @@
   --color-fuente: #f1f5f9;
 
   --fondo-host: #0f172a;
-  --fondo-card: rgba(30, 41, 59, 0.7);
+  --fondo-card: rgba(30, 41, 59, 0.85);
   --fondo-input: rgba(15, 23, 42, 0.6);
   --fondo-disabled: #334155;
 
@@ -22,17 +22,54 @@
   --color-error: #f87171;
   --color-advertencia: #eab308;
 
-  --borde-sutil: rgba(255, 255, 255, 0.08);
+  --borde-sutil: rgba(255, 255, 255, 0.1);
   --borde-focus: #6366f1;
 
-  --sombra-card: 0 10px 30px rgba(0, 0, 0, 0.2);
+  --sombra-card: 0 10px 40px rgba(0, 0, 0, 0.3);
   --sombra-primario: 0 4px 15px rgba(99, 102, 241, 0.2);
+
+  --gradient-primario: linear-gradient(135deg, #6366f1, #4f46e5);
+  --gradient-header: linear-gradient(135deg, #6366f1, #a855f7);
 
   --fuente-principal: 'Outfit', 'Inter', sans-serif;
   --fuente-mono: monospace;
+}
 
-  /* --bp-mobile: 768px */
-  /* --bp-tablet: 1024px */
+/* Bootstrap dark theme overrides */
+.form-control,
+.form-select {
+  background-color: var(--fondo-input);
+  border: 1px solid var(--borde-sutil);
+  color: var(--texto-principal);
+  font-family: var(--fuente-principal);
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--fondo-input);
+  border-color: var(--borde-focus);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  color: var(--texto-principal);
+}
+
+.form-control::placeholder,
+.form-select::placeholder {
+  color: var(--texto-disabled);
+  opacity: 0.7;
+}
+
+.form-select option {
+  background-color: var(--fondo-tarjeta);
+  color: var(--texto-principal);
+}
+
+.form-label {
+  color: var(--texto-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
 }
 
 * {

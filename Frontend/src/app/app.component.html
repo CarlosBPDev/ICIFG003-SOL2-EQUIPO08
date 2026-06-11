@@ -1,10 +1,10 @@
-<header *ngIf="authService.isLoggedIn()">
+<header>
   <nav class="app-navbar">
     <div class="nav-container">
-      <div class="nav-logo">
-        <span class="logo-icon" aria-hidden="true">🎓</span>
-        <span class="logo-text">ReservaSalas</span>
-      </div>
+      <a routerLink="/home" class="nav-logo">
+        <img src="assets/logo.png" alt="Logo Biblioteca" class="logo-img">
+        <span class="logo-text">Biblioteca USS</span>
+      </a>
       <app-menu></app-menu>
       <div class="nav-user" *ngIf="authService.currentUser">
         <span class="user-name">{{ authService.currentUser.nombre }} {{ authService.currentUser.apellido }}</span>
@@ -18,6 +18,34 @@
   <router-outlet></router-outlet>
 </main>
 
-<footer class="app-footer" *ngIf="authService.isLoggedIn()">
-  <p>&copy; 2026 S2_ATW — ReservaSalas</p>
+<footer class="app-footer">
+  <div class="footer-container">
+    <div class="footer-col">
+      <h4>Biblioteca Central USS</h4>
+      <p class="mb-1"><i class="fas fa-location-dot me-2"></i>Av. del Libertador 1.500, Edificio Central</p>
+      <p class="mb-1"><i class="fas fa-map-pin me-2"></i>Santiago, Chile</p>
+      <p class="mb-1"><i class="fas fa-phone me-2"></i>Tel: +56 2 2678 9000</p>
+      <p class="mb-0"><i class="fas fa-envelope me-2"></i>Email: biblioteca&#64;uss.cl</p>
+    </div>
+    <div class="footer-col">
+      <h4>Horarios</h4>
+      <p class="mb-1"><i class="fas fa-clock me-2"></i>Lunes a Viernes: 8:00 - 21:00</p>
+      <p class="mb-1"><i class="fas fa-clock me-2"></i>Sábados: 9:00 - 18:00</p>
+      <p class="mb-0"><i class="fas fa-clock me-2"></i>Domingos: Cerrado</p>
+    </div>
+    <div class="footer-col">
+      <h4>Enlaces</h4>
+      <a routerLink="/home"><i class="fas fa-home me-2"></i>Inicio</a>
+      <a routerLink="/salas"><i class="fas fa-door-open me-2"></i>Salas de Estudio</a>
+      <a routerLink="/reservas"><i class="fas fa-calendar-check me-2"></i>Mis Reservas</a>
+      <a routerLink="/estudiantes"><i class="fas fa-user-graduate me-2"></i>Estudiantes</a>
+    </div>
+    <div class="footer-col">
+      <h4>Sobre Nosotros</h4>
+      <p>La Biblioteca Central USS ofrece espacios modernos y recursos académicos para toda la comunidad universitaria.</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="mb-0">&copy; 2026 Biblioteca Central Universidad San Sebastián. Todos los derechos reservados.</p>
+  </div>
 </footer>

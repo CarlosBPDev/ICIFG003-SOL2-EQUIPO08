@@ -1,23 +1,24 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { EstudianteService } from '../../../services/estudiante.service';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   template: `
     <div class="login-wrapper">
       <div class="login-card">
-        <h2>Bienvenido</h2>
-        <p class="subtitle">Ingresa tu correo electrónico para gestionar reservas</p>
+        <img src="assets/logo.png" alt="Logo Biblioteca" class="login-logo">
+        <h2>Iniciar Sesión</h2>
+        <p class="subtitle">Ingresa tus credenciales para gestionar reservas</p>
 
         <form class="login-form" (submit)="onSubmit()">
-          <div class="input-group">
-            <label for="correo">Correo Electrónico</label>
+          <div class="mb-3">
+            <label for="correo" class="form-label">Correo Electrónico</label>
             <input
               id="correo"
               type="email"
@@ -25,11 +26,12 @@ import { AuthService } from '../../../services/auth.service';
               [(ngModel)]="correo"
               name="correo"
               required
+              class="form-control"
             >
           </div>
 
-          <div class="input-group">
-            <label for="password">Contraseña</label>
+          <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
             <input
               id="password"
               type="password"
@@ -37,15 +39,20 @@ import { AuthService } from '../../../services/auth.service';
               [(ngModel)]="password"
               name="password"
               required
+              class="form-control"
             >
           </div>
 
           <p class="error-msg" *ngIf="errorMsg">{{ errorMsg }}</p>
 
           <button type="submit" class="btn-primary" [disabled]="loading">
-            {{ loading ? 'Buscando...' : 'Ingresar' }}
+            {{ loading ? 'Ingresando...' : 'Ingresar' }}
           </button>
         </form>
+
+        <div class="register-link">
+          <p>¿No tienes cuenta? <a routerLink="/register">Regístrate aquí</a></p>
+        </div>
       </div>
     </div>
   `,
@@ -69,6 +76,12 @@ import { AuthService } from '../../../services/auth.service';
       max-width: 400px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
       text-align: center;
+    }
+    .login-logo {
+      height: 60px;
+      width: auto;
+      margin-bottom: 1.5rem;
+      border-radius: 0.5rem;
     }
     h2 {
       font-size: 1.75rem;
@@ -143,6 +156,21 @@ import { AuthService } from '../../../services/auth.service';
       cursor: not-allowed;
       transform: none;
     }
+    .register-link {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--texto-muted);
+    }
+    .register-link a {
+      color: #818cf8;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .register-link a:hover {
+      color: #a5b4fc;
+      text-decoration: underline;
+    }
   `]
 })
 export class LoginComponent {
@@ -172,7 +200,14 @@ export class LoginComponent {
   ) {}
 
   onSubmit(): void {
-    if (!this.correo.trim() || !this.password.trim()) return;
+    if (!this.correo.trim()) {
+      this.errorMsg = 'Ingresa un correo electrónico.';
+      return;
+    }
+    if (!this.password || this.password.length < 4) {
+      this.errorMsg = 'La contraseña debe tener al menos 4 caracteres.';
+      return;
+    }
 
     if (this.correo.trim() === LoginComponent.TEST_ACCOUNT.correo && this.password === LoginComponent.TEST_ACCOUNT.password) {
       this.authService.login(LoginComponent.TEST_ACCOUNT.user as any);
@@ -190,7 +225,7 @@ export class LoginComponent {
           this.authService.login(estudiante);
           this.router.navigate(['/salas']);
         } else {
-          this.errorMsg = 'Estudiante no encontrado con ese correo';
+          this.errorMsg = 'Estudiante no encontrado con ese correo.';
           this.loading = false;
         }
       },

@@ -22,14 +22,15 @@ import { EstudianteResponseDTO } from '../../../models';
         <section class="search-card">
           <h2>Buscar Estudiante</h2>
           <div class="search-form">
-            <div class="input-group">
-              <label for="searchTerm">RUT, nombre o apellido</label>
+            <div class="flex-grow-1">
+              <label for="searchTerm" class="form-label">RUT, nombre o apellido</label>
               <input
                 id="searchTerm"
                 type="text"
                 placeholder="Ej: Juan Pérez o 11111111-1"
                 [(ngModel)]="searchTerm"
                 (keyup.enter)="buscar()"
+                class="form-control"
               >
             </div>
             <button class="btn-search" (click)="buscar()" [disabled]="!searchTerm.trim()">

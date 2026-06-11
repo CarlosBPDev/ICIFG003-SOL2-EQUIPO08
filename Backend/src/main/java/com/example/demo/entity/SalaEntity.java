@@ -23,7 +23,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "sala")
@@ -77,5 +79,7 @@ public class SalaEntity {
         inverseJoinColumns = @JoinColumn(name = "recurso_id")
     )
     @JsonIgnoreProperties("salas")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<RecursoEntity> recursos = new HashSet<>();
 }

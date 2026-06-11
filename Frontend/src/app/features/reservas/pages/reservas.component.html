@@ -15,8 +15,8 @@
       <div class="criterios-grid">
         <!-- Selector Sala -->
         <div class="criterio-group">
-          <label for="salaSelect">Sala de Estudio</label>
-          <select id="salaSelect" [(ngModel)]="selectedSalaId" (change)="onCriteriaChange()" class="select-input">
+          <label for="salaSelect" class="form-label">Sala de Estudio</label>
+          <select id="salaSelect" [(ngModel)]="selectedSalaId" (change)="onCriteriaChange()" class="form-select select-input">
             <option [ngValue]="null" disabled selected>Elige una sala...</option>
             <option *ngFor="let sala of salas" [ngValue]="sala.id">
               {{ sala.nombreSala }} ({{ sala.codigoSala }} - Cap. {{ sala.capacidad }})
@@ -26,8 +26,8 @@
 
         <!-- Selector Fecha -->
         <div class="criterio-group">
-          <label for="fechaInput">Fecha de Consulta</label>
-          <input type="date" id="fechaInput" [(ngModel)]="selectedFecha" (change)="onCriteriaChange()" class="date-picker">
+          <label for="fechaInput" class="form-label">Fecha de Consulta</label>
+          <input type="date" id="fechaInput" [(ngModel)]="selectedFecha" (change)="onCriteriaChange()" class="form-control date-picker">
         </div>
       </div>
     </section>
@@ -78,7 +78,7 @@
 
       <ng-template #noReservas>
         <div class="empty-state">
-          <span class="empty-icon">📅</span>
+          <span class="empty-icon"><i class="fas fa-calendar-alt"></i></span>
           <p>No existen reservas registradas para esta sala en la fecha seleccionada.</p>
         </div>
       </ng-template>
@@ -86,7 +86,7 @@
 
     <!-- Instrucciones iniciales -->
     <section class="initial-state" *ngIf="!selectedSalaId || !selectedFecha">
-      <span class="search-icon">🔍</span>
+      <span class="search-icon"><i class="fas fa-search"></i></span>
       <p>Selecciona una sala y una fecha para visualizar el calendario de reservas.</p>
     </section>
   </main>

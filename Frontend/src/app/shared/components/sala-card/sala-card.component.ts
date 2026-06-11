@@ -16,6 +16,12 @@ export class SalaCardComponent {
 
   constructor(private router: Router) {}
 
+  getImagenUrl(): string {
+    if (this.sala.capacidad <= 4) return 'assets/images/sala4p.jpg';
+    if (this.sala.capacidad <= 8) return 'assets/images/sala8p.jpg';
+    return 'assets/images/sala8mp.jpg';
+  }
+
   reservar() {
     this.router.navigate(['/reservas/nueva'], { queryParams: { salaId: this.sala.id } });
   }
