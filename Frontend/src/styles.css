@@ -16,7 +16,7 @@
   --texto-principal: #f1f5f9;
   --texto-secundario: #e2e8f0;
   --texto-muted: #94a3b8;
-  --texto-disabled: #64748b;
+  --texto-disabled: #718096;
 
   --color-exito: #4ade80;
   --color-error: #f87171;
@@ -46,6 +46,17 @@ body {
   background-color: var(--fondo-claro);
   color: var(--color-fuente);
   min-height: 100vh;
+}
+
+/* T4c: Global focus-visible styles for accessibility */
+*:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+/* Remove default focus outline when not using keyboard */
+*:focus:not(:focus-visible) {
+  outline: none;
 }
 
 @media (max-width: 1023px) {

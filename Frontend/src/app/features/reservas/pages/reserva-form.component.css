@@ -288,6 +288,15 @@
   border-color: var(--color-error);
 }
 
+.btn-quitar:focus-visible {
+  outline: 2px solid #ef4444;
+  outline-offset: 2px;
+}
+
+.btn-quitar:active {
+  transform: scale(0.93);
+}
+
 .horarios-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -323,9 +332,14 @@
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
 }
 
-.horario-btn:focus {
-  outline: none;
+.horario-btn:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.4);
+}
+
+.horario-btn:active {
+  transform: scale(0.97);
 }
 
 .horario-hora {
@@ -379,6 +393,15 @@
   border-color: rgba(255, 255, 255, 0.2);
 }
 
+.btn-cancel:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+.btn-cancel:active {
+  transform: scale(0.97);
+}
+
 .btn-submit {
   padding: 0.8rem 2rem;
   border-radius: 0.75rem;
@@ -399,6 +422,16 @@
 .btn-submit:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+}
+
+.btn-submit:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+.btn-submit:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
 }
 
 .btn-submit:disabled {

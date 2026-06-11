@@ -11,14 +11,22 @@ export class SalaService {
 
   constructor(private http: HttpClient) {}
 
-  getSalas(capacidad?: number, edificioId?: number): Observable<SalaResponseDTO[]> {
+  getSalas(capacidadMax?: number, capacidadMin?: number, edificioId?: number): Observable<SalaResponseDTO[]> {
     let params = new HttpParams();
-    if (capacidad != null) {
-      params = params.set('capacidad', capacidad.toString());
+    if (capacidadMax != null) {
+      params = params.set('capacidadMax', capacidadMax.toString());
+    }
+    if (capacidadMin != null) {
+      params = params.set('capacidadMin', capacidadMin.toString());
     }
     if (edificioId != null) {
       params = params.set('edificioId', edificioId.toString());
     }
     return this.http.get<SalaResponseDTO[]>(this.apiUrl, { params });
+  }
+
+  getSalasDisponibles(fecha: string): Observable<SalaResponseDTO[]> {
+    let params = new HttpParams().set('fecha', fecha);
+    return this.http.get<SalaResponseDTO[]>(`${this.apiUrl}/disponibles`, { params });
   }
 }

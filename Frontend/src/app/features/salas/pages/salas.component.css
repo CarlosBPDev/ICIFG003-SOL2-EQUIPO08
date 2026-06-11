@@ -280,6 +280,15 @@
   background: rgba(255, 255, 255, 0.03);
 }
 
+.radio-btn:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+.radio-btn:active {
+  transform: scale(0.97);
+}
+
 .radio-btn.active {
   color: #ffffff;
   background: linear-gradient(135deg, #6366f1, #4f46e5);
@@ -342,11 +351,27 @@
   to { transform: rotate(360deg); }
 }
 
-/* Grid layout */
+/* Grid layout — T7: 3 breakpoints */
 .salas-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .salas-main-layout {
+    grid-template-columns: 1fr 250px;
+  }
+
+  .salas-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .salas-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Cards style */
@@ -513,6 +538,16 @@
 .btn-reserva:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+}
+
+.btn-reserva:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+.btn-reserva:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
 }
 
 .btn-reserva:disabled {

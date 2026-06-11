@@ -38,18 +38,48 @@ export class SalasComponent implements OnInit {
 
   loadSalas(): void {
     this.loading = true;
-    this.salaService.getSalas().subscribe({
-      next: (data) => {
-        this.salas = data;
-        this.loadHorarios();
-        this.applyFilters();
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Error al cargar salas:', err);
-        this.loading = false;
-      }
-    });
+
+    // Determine capacity range params based on filter
+    let capacidadMax: number | undefined;
+    let capacidadMin: number | undefined;
+
+    if (this.capacidadFilter === '4') {
+      capacidadMax = 4;
+    } else if (this.capacidadFilter === '8') {
+      capacidadMax = 8;
+    } else if (this.capacidadFilter === 'more') {
+      capacidadMin = 8;
+    }
+
+    if (this.fechaFilter) {
+      // Use the availability endpoint when a date is selected
+      this.salaService.getSalasDisponibles(this.fechaFilter).subscribe({
+        next: (data) => {
+          this.salas = data;
+          this.loadHorarios();
+          this.applyCapacidadFilter();
+          this.loadReservationsForDate();
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Error al cargar salas disponibles:', err);
+          this.loading = false;
+        }
+      });
+    } else {
+      this.salaService.getSalas(capacidadMax, capacidadMin).subscribe({
+        next: (data) => {
+          this.salas = data;
+          this.loadHorarios();
+          this.filteredSalas = data;
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Error al cargar salas:', err);
+          this.loading = false;
+        }
+      });
+    }
   }
 
   loadHorarios(): void {
@@ -63,27 +93,26 @@ export class SalasComponent implements OnInit {
     });
   }
 
-  onFilterChange(): void {
-    if (this.fechaFilter) {
-      this.loading = true;
-      this.reservaService.getReservas(undefined, this.fechaFilter).subscribe({
-        next: (data) => {
-          this.reservations = data;
-          this.applyFilters();
-          this.loading = false;
-        },
-        error: (err) => {
-          console.error('Error al cargar reservas:', err);
-          this.loading = false;
-        }
-      });
-    } else {
+  loadReservationsForDate(): void {
+    if (!this.fechaFilter) {
       this.reservations = [];
-      this.applyFilters();
+      return;
     }
+    this.reservaService.getReservas(undefined, this.fechaFilter).subscribe({
+      next: (data) => {
+        this.reservations = data;
+      },
+      error: (err) => {
+        console.error('Error al cargar reservas:', err);
+      }
+    });
   }
 
-  applyFilters(): void {
+  onFilterChange(): void {
+    this.loadSalas();
+  }
+
+  applyCapacidadFilter(): void {
     let result = [...this.salas];
 
     if (this.capacidadFilter === '4') {
