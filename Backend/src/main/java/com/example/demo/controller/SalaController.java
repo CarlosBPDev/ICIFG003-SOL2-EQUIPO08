@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.EdificioResponseDTO;
+import com.example.demo.dto.RecursoResponseDTO;
 import com.example.demo.dto.SalaResponseDTO;
+import com.example.demo.entity.RecursoEntity;
 import com.example.demo.entity.SalaEntity;
 import com.example.demo.repository.SalaRepository;
 
@@ -53,6 +56,20 @@ public class SalaController {
             edificioDTO.setDireccion(entity.getEdificio().getDireccion());
             dto.setEdificio(edificioDTO);
         }
+
+        if (entity.getRecursos() != null && !entity.getRecursos().isEmpty()) {
+            Set<RecursoResponseDTO> recursosDTO = entity.getRecursos().stream().map(this::recursoToDTO).collect(Collectors.toSet());
+            dto.setRecursos(recursosDTO);
+        }
+
+        return dto;
+    }
+
+    private RecursoResponseDTO recursoToDTO(RecursoEntity entity) {
+        RecursoResponseDTO dto = new RecursoResponseDTO();
+        dto.setId(entity.getId());
+        dto.setNombreRecurso(entity.getNombreRecurso());
+        dto.setDescripcion(entity.getDescripcion());
         return dto;
     }
 }

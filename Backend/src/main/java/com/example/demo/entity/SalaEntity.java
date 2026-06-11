@@ -1,14 +1,25 @@
 package com.example.demo.entity;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -50,4 +61,21 @@ public class SalaEntity {
     @ManyToOne
     @JoinColumn(name = "id_edificio")
     private EdificioEntity edificio;
+
+    @OneToMany(mappedBy = "sala")
+    @JsonIgnore
+    private List<HorarioDisponibleEntity> horarios = new ArrayList<>();
+
+    @OneToMany(mappedBy = "sala")
+    @JsonIgnore
+    private List<ReservaEntity> reservas = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "sala_recurso",
+        joinColumns = @JoinColumn(name = "sala_id"),
+        inverseJoinColumns = @JoinColumn(name = "recurso_id")
+    )
+    @JsonIgnoreProperties("salas")
+    private Set<RecursoEntity> recursos = new HashSet<>();
 }

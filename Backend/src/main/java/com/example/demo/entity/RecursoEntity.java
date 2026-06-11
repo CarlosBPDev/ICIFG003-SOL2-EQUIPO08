@@ -1,16 +1,15 @@
 package com.example.demo.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,24 +18,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "edificio")
+@Table(name = "recurso")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EdificioEntity {
+public class RecursoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Column(name = "nombre_edificio", length = 100, nullable = false)
-    private String nombreEdificio;
+    @Column(name = "nombre_recurso", nullable = false, length = 100)
+    private String nombreRecurso;
 
-    @NotNull
-    @Column(length = 200, nullable = false)
-    private String direccion;
+    @Column(length = 255)
+    private String descripcion;
 
-    @OneToMany(mappedBy = "edificio")
+    @ManyToMany(mappedBy = "recursos")
     @JsonIgnore
-    private List<SalaEntity> salas = new ArrayList<>();
+    private Set<SalaEntity> salas = new HashSet<>();
 }
