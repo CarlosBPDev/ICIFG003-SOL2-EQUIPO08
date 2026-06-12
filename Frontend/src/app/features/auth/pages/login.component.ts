@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { EstudianteService } from '../../../services/estudiante.service';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
@@ -102,19 +101,19 @@ import { AuthService } from '../../../services/auth.service';
       gap: 1.25rem;
       text-align: left;
     }
-    .input-group {
+    .mb-3 {
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
     }
-    .input-group label {
+    .form-label {
       font-size: 0.8rem;
       font-weight: 600;
       color: #94a3b8;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
-    .input-group input {
+    .form-control {
       padding: 0.8rem 1rem;
       background: rgba(15, 23, 42, 0.6);
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -124,7 +123,7 @@ import { AuthService } from '../../../services/auth.service';
       transition: all 0.25s ease;
       font-size: 0.95rem;
     }
-    .input-group input:focus {
+    .form-control:focus {
       border-color: #6366f1;
       box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
     }
@@ -174,27 +173,12 @@ import { AuthService } from '../../../services/auth.service';
   `]
 })
 export class LoginComponent {
-  private static readonly TEST_ACCOUNT = {
-    correo: 'test@test.cl',
-    password: '1234',
-    user: {
-      id: 0,
-      rut: '0-0',
-      nombre: 'Usuario',
-      apellido: 'Prueba',
-      correo: 'test@test.cl',
-      telefono: '900000000',
-      fechaRegistro: '2026-01-01T00:00:00',
-      carrera: { id: 1, nombreCarrera: 'Ingeniería Informática', facultad: 'Facultad de Ingeniería' }
-    }
-  };
   correo = '';
   password = '';
   errorMsg = '';
   loading = false;
 
   constructor(
-    private estudianteService: EstudianteService,
     private authService: AuthService,
     private router: Router
   ) {}
@@ -209,28 +193,15 @@ export class LoginComponent {
       return;
     }
 
-    if (this.correo.trim() === LoginComponent.TEST_ACCOUNT.correo && this.password === LoginComponent.TEST_ACCOUNT.password) {
-      this.authService.login(LoginComponent.TEST_ACCOUNT.user as any);
-      this.router.navigate(['/salas']);
-      return;
-    }
-
     this.loading = true;
     this.errorMsg = '';
 
-    this.estudianteService.buscarEstudiante({ correo: this.correo.trim() }).subscribe({
-      next: (data) => {
-        const estudiante = data.find(e => e.correo === this.correo.trim());
-        if (estudiante) {
-          this.authService.login(estudiante);
-          this.router.navigate(['/salas']);
-        } else {
-          this.errorMsg = 'Estudiante no encontrado con ese correo.';
-          this.loading = false;
-        }
+    this.authService.loginWithCredentials(this.correo.trim(), this.password).subscribe({
+      next: () => {
+        this.router.navigate(['/salas']);
       },
-      error: () => {
-        this.errorMsg = 'Error al buscar estudiante. Intenta nuevamente.';
+      error: (err) => {
+        this.errorMsg = err.error?.error || 'Correo o contraseña incorrectos.';
         this.loading = false;
       }
     });

@@ -14,4 +14,7 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
 
     @Query("SELECT u FROM UsuarioEntity u JOIN FETCH u.estudiante WHERE u.username = :username")
     Optional<UsuarioEntity> findByUsernameWithEstudiante(@Param("username") String username);
+
+    @Query("SELECT u FROM UsuarioEntity u JOIN FETCH u.estudiante e WHERE e.correo = :correo")
+    Optional<UsuarioEntity> findByEstudianteCorreo(@Param("correo") String correo);
 }

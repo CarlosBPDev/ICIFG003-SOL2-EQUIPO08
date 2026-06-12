@@ -111,17 +111,18 @@ ON CONFLICT DO NOTHING;
 -- USUARIOS (1 por estudiante = 10)
 -- password: "1234" en bcrypt hash
 -- =========================
+DELETE FROM usuario;
 INSERT INTO usuario (id, username, password_hash, rol, id_estudiante) VALUES
-(1,  'juan.perez', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ESTUDIANTE', 1),
-(2,  'maria.gonzalez', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ESTUDIANTE', 2),
-(3,  'pedro.rojas', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ESTUDIANTE', 3),
-(4,  'ana.torres', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ESTUDIANTE', 4),
-(5,  'luis.martinez', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ESTUDIANTE', 5),
-(6,  'camila.soto', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ESTUDIANTE', 6),
-(7,  'diego.morales', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ESTUDIANTE', 7),
-(8,  'valentina.castro', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ESTUDIANTE', 8),
-(9,  'andres.silva', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ESTUDIANTE', 9),
-(10, 'fernanda.diaz', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ESTUDIANTE', 10)
+(1,  'juan.perez', '$2a$10$9rjxo8rPrYnIxmFntuXRXO97/y/OTFxWf2czKLjSgwpUB.YlC1zIO', 'ESTUDIANTE', 1),
+(2,  'maria.gonzalez', '$2a$10$9rjxo8rPrYnIxmFntuXRXO97/y/OTFxWf2czKLjSgwpUB.YlC1zIO', 'ESTUDIANTE', 2),
+(3,  'pedro.rojas', '$2a$10$9rjxo8rPrYnIxmFntuXRXO97/y/OTFxWf2czKLjSgwpUB.YlC1zIO', 'ESTUDIANTE', 3),
+(4,  'ana.torres', '$2a$10$9rjxo8rPrYnIxmFntuXRXO97/y/OTFxWf2czKLjSgwpUB.YlC1zIO', 'ESTUDIANTE', 4),
+(5,  'luis.martinez', '$2a$10$9rjxo8rPrYnIxmFntuXRXO97/y/OTFxWf2czKLjSgwpUB.YlC1zIO', 'ESTUDIANTE', 5),
+(6,  'camila.soto', '$2a$10$9rjxo8rPrYnIxmFntuXRXO97/y/OTFxWf2czKLjSgwpUB.YlC1zIO', 'ESTUDIANTE', 6),
+(7,  'diego.morales', '$2a$10$9rjxo8rPrYnIxmFntuXRXO97/y/OTFxWf2czKLjSgwpUB.YlC1zIO', 'ESTUDIANTE', 7),
+(8,  'valentina.castro', '$2a$10$9rjxo8rPrYnIxmFntuXRXO97/y/OTFxWf2czKLjSgwpUB.YlC1zIO', 'ESTUDIANTE', 8),
+(9,  'andres.silva', '$2a$10$9rjxo8rPrYnIxmFntuXRXO97/y/OTFxWf2czKLjSgwpUB.YlC1zIO', 'ESTUDIANTE', 9),
+(10, 'fernanda.diaz', '$2a$10$9rjxo8rPrYnIxmFntuXRXO97/y/OTFxWf2czKLjSgwpUB.YlC1zIO', 'ESTUDIANTE', 10)
 ON CONFLICT DO NOTHING;
 
 -- =========================

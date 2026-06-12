@@ -44,6 +44,11 @@ export interface SalaResponseDTO {
   horarios?: HorarioDisponibleResponseDTO[];
 }
 
+export interface LoginRequestDTO {
+  username: string;
+  password: string;
+}
+
 export interface ReservaRequestDTO {
   fechaReserva: string; // "YYYY-MM-DD"
   observacion: string;

@@ -24,8 +24,15 @@ public class AuthController {
 
     @PostMapping("/login")
     public EstudianteResponseDTO login(@RequestBody LoginRequestDTO request) {
-        UsuarioEntity usuario = usuarioRepository.findByUsernameWithEstudiante(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("Usuario o contraseña incorrectos"));
+        String credential = request.getUsername();
+
+        UsuarioEntity usuario = usuarioRepository.findByUsernameWithEstudiante(credential)
+                .orElse(null);
+
+        if (usuario == null) {
+            usuario = usuarioRepository.findByEstudianteCorreo(credential)
+                    .orElseThrow(() -> new RuntimeException("Usuario o contraseña incorrectos"));
+        }
 
         if (!passwordEncoder.matches(request.getPassword(), usuario.getPasswordHash())) {
             throw new RuntimeException("Usuario o contraseña incorrectos");
