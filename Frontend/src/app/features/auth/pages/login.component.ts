@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { LoggerService } from '../../../services/logger.service';
 
 @Component({
   selector: 'app-login',
@@ -172,7 +173,7 @@ import { AuthService } from '../../../services/auth.service';
     }
   `]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   correo = '';
   password = '';
   errorMsg = '';
@@ -180,10 +181,16 @@ export class LoginComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private logger: LoggerService
   ) {}
 
+  ngOnInit(): void {
+    this.logger.info('Componente de login inicializado');
+  }
+
   onSubmit(): void {
+    this.logger.info('Intento de inicio de sesion para: {}', this.correo);
     if (!this.correo.trim()) {
       this.errorMsg = 'Ingresa un correo electrónico.';
       return;
@@ -198,9 +205,11 @@ export class LoginComponent {
 
     this.authService.loginWithCredentials(this.correo.trim(), this.password).subscribe({
       next: () => {
+        this.logger.info('Redirigiendo a /salas tras login exitoso');
         this.router.navigate(['/salas']);
       },
       error: (err) => {
+        this.logger.error('Error en login: {}', err.error?.error || err.message);
         this.errorMsg = err.error?.error || 'Correo o contraseña incorrectos.';
         this.loading = false;
       }

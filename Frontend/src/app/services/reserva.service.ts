@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ReservaRequestDTO, ReservaResponseDTO } from '../models';
+import { LoggerService } from './logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +10,10 @@ import { ReservaRequestDTO, ReservaResponseDTO } from '../models';
 export class ReservaService {
   private apiUrl = '/api/reservas';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private logger: LoggerService) {}
 
   getReservas(salaId?: number, fecha?: string): Observable<ReservaResponseDTO[]> {
+    this.logger.info('Obteniendo reservas - salaId: {}, fecha: {}', salaId, fecha);
     let params = new HttpParams();
     if (salaId != null) {
       params = params.set('salaId', salaId.toString());
@@ -23,6 +25,7 @@ export class ReservaService {
   }
 
   crearReserva(dto: ReservaRequestDTO): Observable<ReservaResponseDTO> {
+    this.logger.info('Creando reserva para estudiante ID: {}', dto.estudianteId);
     return this.http.post<ReservaResponseDTO>(this.apiUrl, dto);
   }
 }

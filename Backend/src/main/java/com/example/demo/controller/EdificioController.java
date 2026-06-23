@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.entity.EdificioEntity;
 import com.example.demo.repository.EdificioRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/edificios")
 public class EdificioController {
@@ -19,6 +22,7 @@ public class EdificioController {
 
     @GetMapping
     public List<EdificioEntity> getAllEdificios() {
+        log.info("Consultando lista de edificios");
         return edificioRepository.findAll();
     }
 }

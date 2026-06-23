@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dto.CarreraResponseDTO;
+
+import lombok.extern.slf4j.Slf4j;
 import com.example.demo.dto.EdificioResponseDTO;
 import com.example.demo.dto.EstadoReservaResponseDTO;
 import com.example.demo.dto.EstudianteResponseDTO;
@@ -27,6 +29,7 @@ import com.example.demo.repository.HorarioDisponibleRepository;
 import com.example.demo.repository.ReservaRepository;
 import com.example.demo.repository.SalaRepository;
 
+@Slf4j
 @Service
 public class ReservaService {
 
@@ -46,6 +49,7 @@ public class ReservaService {
     private EstadoReservaRepository estadoReservaRepository;
 
     public List<ReservaResponseDTO> obtenerReservas(Long salaId, LocalDate fecha) {
+        log.info("Obteniendo reservas - salaId: {}, fecha: {}", salaId, fecha);
         List<ReservaEntity> reservas;
         if (salaId != null && fecha != null) {
             reservas = reservaRepository.findBySalaAndFecha(salaId, fecha);
@@ -54,33 +58,53 @@ public class ReservaService {
         } else {
             reservas = reservaRepository.findAll();
         }
+        log.info("Reservas encontradas: {}", reservas.size());
         return reservas.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     @Transactional
     public ReservaResponseDTO crearReserva(ReservaRequestDTO request) {
+        log.info("Creando reserva para estudiante ID: {}, sala ID: {}, horario ID: {}", 
+                 request.getEstudianteId(), request.getSalaId(), request.getHorarioDisponibleId());
+
         if (request.getFechaReserva() == null) {
+            log.warn("Fecha de reserva obligatoria no proporcionada");
             throw new RuntimeException("La fecha de reserva es obligatoria");
         }
         if (request.getFechaReserva().isBefore(LocalDate.now())) {
+            log.warn("Fecha de reserva en el pasado: {}", request.getFechaReserva());
             throw new RuntimeException("La fecha de reserva no puede ser anterior a hoy");
         }
 
         if (request.getObservacion() == null || request.getObservacion().trim().length() < 15) {
+            log.warn("Observacion demasiado corta: {} caracteres", 
+                     request.getObservacion() != null ? request.getObservacion().trim().length() : 0);
             throw new RuntimeException("La observación debe tener al menos 15 caracteres");
         }
 
         EstudianteEntity estudiante = estudianteRepository.findById(request.getEstudianteId())
-                .orElseThrow(() -> new RuntimeException("El estudiante con ID " + request.getEstudianteId() + " no existe"));
+                .orElseThrow(() -> {
+                    log.warn("Estudiante no encontrado ID: {}", request.getEstudianteId());
+                    return new RuntimeException("El estudiante con ID " + request.getEstudianteId() + " no existe");
+                });
 
         SalaEntity sala = salaRepository.findById(request.getSalaId())
-                .orElseThrow(() -> new RuntimeException("La sala con ID " + request.getSalaId() + " no existe"));
+                .orElseThrow(() -> {
+                    log.warn("Sala no encontrada ID: {}", request.getSalaId());
+                    return new RuntimeException("La sala con ID " + request.getSalaId() + " no existe");
+                });
 
         HorarioDisponibleEntity horario = horarioDisponibleRepository.findById(request.getHorarioDisponibleId())
-                .orElseThrow(() -> new RuntimeException("El horario disponible con ID " + request.getHorarioDisponibleId() + " no existe"));
+                .orElseThrow(() -> {
+                    log.warn("Horario no encontrado ID: {}", request.getHorarioDisponibleId());
+                    return new RuntimeException("El horario disponible con ID " + request.getHorarioDisponibleId() + " no existe");
+                });
 
         EstadoReservaEntity estado = estadoReservaRepository.findById(request.getEstadoReservaId())
-                .orElseThrow(() -> new RuntimeException("El estado de reserva con ID " + request.getEstadoReservaId() + " no existe"));
+                .orElseThrow(() -> {
+                    log.warn("Estado de reserva no encontrado ID: {}", request.getEstadoReservaId());
+                    return new RuntimeException("El estado de reserva con ID " + request.getEstadoReservaId() + " no existe");
+                });
 
         List<ReservaEntity> conflictos = reservaRepository.findConflictoHorario(
                 request.getSalaId(),
@@ -89,6 +113,8 @@ public class ReservaService {
                 "Cancelada");
 
         if (!conflictos.isEmpty()) {
+            log.warn("Conflicto de horario: sala {} ya reservada en horario {} para fecha {}", 
+                     request.getSalaId(), request.getHorarioDisponibleId(), request.getFechaReserva());
             throw new RuntimeException("Ya existe una reserva activa para esta sala, horario y fecha");
         }
 
@@ -101,6 +127,7 @@ public class ReservaService {
         entity.setEstadoReserva(estado);
 
         ReservaEntity saved = reservaRepository.save(entity);
+        log.info("Reserva creada exitosamente con ID: {}", saved.getId());
         return convertToDTO(saved);
     }
 

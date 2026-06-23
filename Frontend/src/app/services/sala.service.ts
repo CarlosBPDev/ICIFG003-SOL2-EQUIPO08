@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SalaResponseDTO } from '../models';
+import { LoggerService } from './logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +10,10 @@ import { SalaResponseDTO } from '../models';
 export class SalaService {
   private apiUrl = '/api/salas';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private logger: LoggerService) {}
 
   getSalas(capacidadMax?: number, capacidadMin?: number, edificioId?: number): Observable<SalaResponseDTO[]> {
+    this.logger.info('Obteniendo salas - capacidadMax: {}, capacidadMin: {}, edificioId: {}', capacidadMax, capacidadMin, edificioId);
     let params = new HttpParams();
     if (capacidadMax != null) {
       params = params.set('capacidadMax', capacidadMax.toString());
@@ -26,6 +28,7 @@ export class SalaService {
   }
 
   getSalasDisponibles(fecha: string): Observable<SalaResponseDTO[]> {
+    this.logger.info('Obteniendo salas disponibles para fecha: {}', fecha);
     let params = new HttpParams().set('fecha', fecha);
     return this.http.get<SalaResponseDTO[]>(`${this.apiUrl}/disponibles`, { params });
   }

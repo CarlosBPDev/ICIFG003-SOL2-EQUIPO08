@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { LoggerService } from '../../../services/logger.service';
 
 @Component({
   selector: 'app-home',
@@ -9,7 +10,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   salasPreview = [
     { codigo: 'S-101', nombre: 'Sala de Estudio Individual', capacidad: 1, descripcion: 'Espacio privado ideal para concentración y estudio silencioso.' },
     { codigo: 'S-204', nombre: 'Sala de Trabajo Grupal', capacidad: 6, descripcion: 'Equipada con pizarra y proyector para trabajos en equipo.' },
@@ -22,4 +23,10 @@ export class HomeComponent {
     { icono: 'fas fa-broom', texto: 'Mantén el orden y limpieza de las salas después de su uso.' },
     { icono: 'fas fa-phone', texto: 'Para incidentes, contacta a la biblioteca al anexo 1234.' }
   ];
+
+  constructor(private logger: LoggerService) {}
+
+  ngOnInit(): void {
+    this.logger.info('Componente home inicializado');
+  }
 }

@@ -12,6 +12,9 @@ import com.example.demo.dto.EstadoReservaResponseDTO;
 import com.example.demo.entity.EstadoReservaEntity;
 import com.example.demo.repository.EstadoReservaRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/estados-reserva")
 public class EstadoReservaController {
@@ -21,6 +24,7 @@ public class EstadoReservaController {
 
     @GetMapping
     public List<EstadoReservaResponseDTO> getEstados() {
+        log.info("Consultando estados de reserva");
         return estadoReservaRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 

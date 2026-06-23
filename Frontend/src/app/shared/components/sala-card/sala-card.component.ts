@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { LoggerService } from '../../../services/logger.service';
 import { SalaResponseDTO, HorarioDisponibleResponseDTO } from '../../../models';
 
 @Component({
@@ -10,11 +11,15 @@ import { SalaResponseDTO, HorarioDisponibleResponseDTO } from '../../../models';
   templateUrl: './sala-card.component.html',
   styleUrls: ['./sala-card.component.css']
 })
-export class SalaCardComponent {
+export class SalaCardComponent implements OnInit {
   @Input() sala!: SalaResponseDTO;
   @Input() horarios: HorarioDisponibleResponseDTO[] = [];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private logger: LoggerService) {}
+
+  ngOnInit(): void {
+    this.logger.info('SalaCardComponent inicializado para sala ID: {}', this.sala?.id);
+  }
 
   getImagenUrl(): string {
     if (this.sala.capacidad <= 4) return 'assets/images/sala4p.jpg';
@@ -23,6 +28,7 @@ export class SalaCardComponent {
   }
 
   reservar() {
+    this.logger.info('Reservar sala ID: {} desde SalaCardComponent', this.sala.id);
     this.router.navigate(['/reservas/nueva'], { queryParams: { salaId: this.sala.id } });
   }
 }

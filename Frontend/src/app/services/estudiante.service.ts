@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { EstudianteResponseDTO } from '../models';
+import { LoggerService } from './logger.service';
 
 const TEST_USER: EstudianteResponseDTO = {
   id: 0,
@@ -21,9 +22,10 @@ const TEST_USER: EstudianteResponseDTO = {
 export class EstudianteService {
   private apiUrl = '/api/estudiantes/buscar';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private logger: LoggerService) {}
 
   buscarEstudiante(query: { rut?: string; nombre?: string; apellido?: string; correo?: string }): Observable<EstudianteResponseDTO[]> {
+    this.logger.info('Buscando estudiantes con query: {}', JSON.stringify(query));
     let params = new HttpParams();
     if (query.rut) {
       params = params.set('rut', query.rut);

@@ -18,6 +18,9 @@ import com.example.demo.entity.RecursoEntity;
 import com.example.demo.entity.SalaEntity;
 import com.example.demo.repository.SalaRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/salas")
 public class SalaController {
@@ -32,6 +35,8 @@ public class SalaController {
             @RequestParam(value = "capacidadMin", required = false) Integer capacidadMin,
             @RequestParam(value = "edificioId", required = false) Long edificioId) {
         
+        log.info("Consultando salas - capacidad: {}, capacidadMax: {}, capacidadMin: {}, edificioId: {}", 
+                 capacidad, capacidadMax, capacidadMin, edificioId);
         List<SalaEntity> salas;
 
         if (capacidadMax != null) {
@@ -44,12 +49,14 @@ public class SalaController {
             salas = salaRepository.findAllWithEdificio();
         }
 
+        log.info("Salas encontradas: {}", salas.size());
         return salas.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     @GetMapping("/disponibles")
     public List<SalaResponseDTO> getSalasDisponibles(
             @RequestParam("fecha") String fechaStr) {
+        log.info("Consultando salas disponibles para fecha: {}", fechaStr);
         LocalDate fecha = LocalDate.parse(fechaStr);
         List<SalaEntity> salas = salaRepository.findSalasDisponiblesPorFecha(fecha);
         return salas.stream().map(this::convertToDTO).collect(Collectors.toList());

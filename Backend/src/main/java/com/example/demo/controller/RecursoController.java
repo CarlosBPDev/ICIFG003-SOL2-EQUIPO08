@@ -12,6 +12,9 @@ import com.example.demo.dto.RecursoResponseDTO;
 import com.example.demo.entity.RecursoEntity;
 import com.example.demo.repository.RecursoRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/recursos")
 public class RecursoController {
@@ -21,6 +24,7 @@ public class RecursoController {
 
     @GetMapping
     public List<RecursoResponseDTO> getRecursos() {
+        log.info("Consultando lista de recursos");
         return recursoRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 

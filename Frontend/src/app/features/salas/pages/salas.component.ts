@@ -6,6 +6,7 @@ import { SalaService } from '../../../services/sala.service';
 import { ReservaService } from '../../../services/reserva.service';
 import { HorarioService } from '../../../services/horario.service';
 import { SalaCardComponent } from '../../../shared/components/sala-card/sala-card.component';
+import { LoggerService } from '../../../services/logger.service';
 import { SalaResponseDTO, ReservaResponseDTO } from '../../../models';
 
 @Component({
@@ -29,15 +30,18 @@ export class SalasComponent implements OnInit {
     private salaService: SalaService,
     private reservaService: ReservaService,
     private horarioService: HorarioService,
-    private router: Router
+    private router: Router,
+    private logger: LoggerService
   ) {}
 
   ngOnInit(): void {
+    this.logger.info('Componente de salas inicializado');
     this.loadSalas();
   }
 
   loadSalas(): void {
     this.loading = true;
+    this.logger.info('Cargando salas con filtro de capacidad: {}, fecha: {}', this.capacidadFilter, this.fechaFilter);
 
     // Determine capacity range params based on filter
     let capacidadMax: number | undefined;
@@ -136,6 +140,7 @@ export class SalasComponent implements OnInit {
   }
 
   reservarSala(salaId: number): void {
+    this.logger.info('Navegando a formulario de reserva para sala ID: {}', salaId);
     this.router.navigate(['/reservas/nueva'], { queryParams: { salaId } });
   }
 }

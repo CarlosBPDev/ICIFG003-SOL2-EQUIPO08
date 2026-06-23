@@ -13,6 +13,9 @@ import com.example.demo.dto.LoginRequestDTO;
 import com.example.demo.entity.UsuarioEntity;
 import com.example.demo.repository.UsuarioRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -25,19 +28,25 @@ public class AuthController {
     @PostMapping("/login")
     public EstudianteResponseDTO login(@RequestBody LoginRequestDTO request) {
         String credential = request.getUsername();
+        log.info("Intento de login para usuario: {}", credential);
 
         UsuarioEntity usuario = usuarioRepository.findByUsernameWithEstudiante(credential)
                 .orElse(null);
 
         if (usuario == null) {
             usuario = usuarioRepository.findByEstudianteCorreo(credential)
-                    .orElseThrow(() -> new RuntimeException("Usuario o contraseña incorrectos"));
+                    .orElseThrow(() -> {
+                        log.warn("Login fallido: usuario no encontrado - {}", credential);
+                        return new RuntimeException("Usuario o contraseña incorrectos");
+                    });
         }
 
         if (!passwordEncoder.matches(request.getPassword(), usuario.getPasswordHash())) {
+            log.warn("Login fallido: contrasena incorrecta para usuario - {}", credential);
             throw new RuntimeException("Usuario o contraseña incorrectos");
         }
 
+        log.info("Login exitoso para usuario: {}", credential);
         var estudiante = usuario.getEstudiante();
         EstudianteResponseDTO dto = new EstudianteResponseDTO();
         dto.setId(estudiante.getId());

@@ -13,6 +13,9 @@ import com.example.demo.dto.HorarioDisponibleResponseDTO;
 import com.example.demo.entity.HorarioDisponibleEntity;
 import com.example.demo.repository.HorarioDisponibleRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/horarios")
 public class HorarioDisponibleController {
@@ -23,6 +26,7 @@ public class HorarioDisponibleController {
     @GetMapping
     public List<HorarioDisponibleResponseDTO> getHorarios(
             @RequestParam("salaId") Long salaId) {
+        log.info("Consultando horarios disponibles para sala ID: {}", salaId);
         List<HorarioDisponibleEntity> horarios = horarioDisponibleRepository.findBySalaOrderByHoraInicio(salaId);
         return horarios.stream().map(this::convertToDTO).collect(Collectors.toList());
     }

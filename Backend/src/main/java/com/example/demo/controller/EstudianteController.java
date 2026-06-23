@@ -14,6 +14,9 @@ import com.example.demo.dto.EstudianteResponseDTO;
 import com.example.demo.entity.EstudianteEntity;
 import com.example.demo.repository.EstudianteRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/estudiantes")
 public class EstudianteController {
@@ -28,10 +31,12 @@ public class EstudianteController {
             @RequestParam(value = "apellido", required = false) String apellido,
             @RequestParam(value = "correo", required = false) String correo) {
 
+        log.info("Busqueda de estudiantes - rut: {}, nombre: {}, apellido: {}, correo: {}", rut, nombre, apellido, correo);
         if (correo != null) {
             return estudianteRepository.findByCorreo(correo).stream().map(this::convertToDTO).collect(Collectors.toList());
         }
         List<EstudianteEntity> estudiantes = estudianteRepository.findByRutOrNombreAndApellido(rut, nombre, apellido);
+        log.info("Estudiantes encontrados: {}", estudiantes.size());
         return estudiantes.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 

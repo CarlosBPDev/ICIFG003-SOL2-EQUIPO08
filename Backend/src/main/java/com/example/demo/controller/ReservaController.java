@@ -15,6 +15,9 @@ import com.example.demo.dto.ReservaRequestDTO;
 import com.example.demo.dto.ReservaResponseDTO;
 import com.example.demo.service.ReservaService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/reservas")
 public class ReservaController {
@@ -27,12 +30,16 @@ public class ReservaController {
             @RequestParam(value = "salaId", required = false) Long salaId,
             @RequestParam(value = "fecha", required = false) String fechaStr) {
 
+        log.info("Consultando reservas - salaId: {}, fecha: {}", salaId, fechaStr);
         LocalDate fecha = (fechaStr != null) ? LocalDate.parse(fechaStr) : null;
         return reservaService.obtenerReservas(salaId, fecha);
     }
 
     @PostMapping
     public ReservaResponseDTO createReserva(@RequestBody ReservaRequestDTO request) {
-        return reservaService.crearReserva(request);
+        log.info("Solicitud de nueva reserva para estudiante ID: {}", request.getEstudianteId());
+        ReservaResponseDTO response = reservaService.crearReserva(request);
+        log.info("Reserva creada exitosamente con ID: {}", response.getId());
+        return response;
     }
 }

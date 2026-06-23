@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.entity.CarreraEntity;
 import com.example.demo.repository.CarreraRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/carreras")
 public class CarreraController {
@@ -19,6 +22,7 @@ public class CarreraController {
 
     @GetMapping
     public List<CarreraEntity> getAllCarreras() {
+        log.info("Consultando lista de carreras");
         return carreraRepository.findAll();
     }
 }
