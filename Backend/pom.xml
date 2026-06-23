@@ -106,9 +106,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 
 <dependency>
 
-<groupId>org.postgresql</groupId>
+<groupId>mysql</groupId>
 
-<artifactId>postgresql</artifactId>
+<artifactId>mysql-connector-java</artifactId>
+
+<scope>runtime</scope>
 
 </dependency>
 

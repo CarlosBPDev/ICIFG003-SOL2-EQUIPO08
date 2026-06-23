@@ -8,20 +8,19 @@
 | Node.js | 20.x |
 | npm | 10.x |
 | Angular CLI | 17.3 |
-| PostgreSQL | 14+ |
+| MySQL | 8.0+ |
 | Maven | 3.8+ (o `./mvnw`) |
 
 ## 1. Crear Base de Datos
 
 ```batch
-psql -U postgres -c "CREATE DATABASE demo01;"
+mysql -u root -e "CREATE DATABASE demo01;"
 ```
 
 ## 2. Poblar Base de Datos (opcional, primera vez)
 
-```batch
-psql -U postgres -d demo01 -f data.sql
-```
+La base de datos se puebla automáticamente al iniciar el backend mediante
+`data.sql` (DML semilla). No es necesario ejecutarlo manualmente.
 
 ## 3. Levantar Backend
 
