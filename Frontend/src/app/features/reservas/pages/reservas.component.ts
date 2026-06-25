@@ -4,13 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { SalaService } from '../../../services/sala.service';
 import { ReservaService } from '../../../services/reserva.service';
+import { MensajeComponent } from '../../../shared/components/mensaje/mensaje.component';
 import { LoggerService } from '../../../services/logger.service';
 import { SalaResponseDTO, ReservaResponseDTO } from '../../../models';
 
 @Component({
   selector: 'app-reservas',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MensajeComponent],
   templateUrl: './reservas.component.html',
   styleUrls: ['./reservas.component.css']
 })
@@ -23,6 +24,8 @@ export class ReservasComponent implements OnInit {
 
   loading: boolean = false;
   totalReservasDelDia: number = 0;
+  errorSalasMsg: string | null = null;
+  errorReservasMsg: string | null = null;
 
   constructor(
     private salaService: SalaService,
@@ -30,6 +33,10 @@ export class ReservasComponent implements OnInit {
     private route: ActivatedRoute,
     private logger: LoggerService
   ) {}
+
+  get hoy(): string {
+    return new Date().toISOString().split('T')[0];
+  }
 
   ngOnInit(): void {
     this.logger.info('Componente de reservas inicializado');
@@ -45,6 +52,7 @@ export class ReservasComponent implements OnInit {
   }
 
   loadSalas(): void {
+    this.errorSalasMsg = null;
     this.logger.info('Cargando lista de salas');
     this.salaService.getSalas().subscribe({
       next: (data) => {
@@ -53,6 +61,7 @@ export class ReservasComponent implements OnInit {
       },
       error: (err) => {
         this.logger.error('Error al cargar salas: {}', err.message);
+        this.errorSalasMsg = err.error?.userMessage || 'No se pudieron cargar las salas. Verifica tu conexión.';
       }
     });
   }
@@ -71,6 +80,7 @@ export class ReservasComponent implements OnInit {
 
     this.logger.info('Cargando reservas para sala ID: {}, fecha: {}', this.selectedSalaId, this.selectedFecha);
     this.loading = true;
+    this.errorReservasMsg = null;
     this.reservaService.getReservas(this.selectedSalaId, this.selectedFecha).subscribe({
       next: (data) => {
         this.reservas = data;
@@ -80,6 +90,7 @@ export class ReservasComponent implements OnInit {
       },
       error: (err) => {
         this.logger.error('Error al cargar reservas: {}', err.message);
+        this.errorReservasMsg = err.error?.userMessage || 'No se pudieron cargar las reservas. Verifica tu conexión.';
         this.loading = false;
       }
     });

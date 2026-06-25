@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +38,7 @@ public class ReservaController {
     }
 
     @PostMapping
-    public ReservaResponseDTO createReserva(@RequestBody ReservaRequestDTO request) {
+    public ReservaResponseDTO createReserva(@Valid @RequestBody ReservaRequestDTO request) {
         log.info("Solicitud de nueva reserva para estudiante ID: {}", request.getEstudianteId());
         ReservaResponseDTO response = reservaService.crearReserva(request);
         log.info("Reserva creada exitosamente con ID: {}", response.getId());

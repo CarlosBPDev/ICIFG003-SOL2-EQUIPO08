@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EstudianteService } from '../../../services/estudiante.service';
+import { MensajeComponent } from '../../../shared/components/mensaje/mensaje.component';
 import { EstudianteResponseDTO } from '../../../models';
 import { LoggerService } from '../../../services/logger.service';
 
 @Component({
   selector: 'app-estudiantes',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MensajeComponent],
   template: `
     <div class="estudiantes-container">
       <header class="estudiantes-header">
@@ -39,6 +40,8 @@ import { LoggerService } from '../../../services/logger.service';
             </button>
           </div>
         </section>
+
+        <app-mensaje [tipo]="'error'" [texto]="errorMsg"></app-mensaje>
 
         <section class="results-section" *ngIf="busquedaRealizada">
           <div class="section-header">
@@ -246,6 +249,7 @@ export class EstudiantesComponent implements OnInit {
   estudiantes: EstudianteResponseDTO[] = [];
   loading = false;
   busquedaRealizada = false;
+  errorMsg: string | null = null;
 
   constructor(
     private estudianteService: EstudianteService,
@@ -283,6 +287,7 @@ export class EstudiantesComponent implements OnInit {
         this.logger.error('Error al buscar estudiantes: {}', err.message);
         this.estudiantes = [];
         this.loading = false;
+        this.errorMsg = err.error?.userMessage || 'Error al buscar estudiantes. Verifica tu conexión.';
       }
     });
   }

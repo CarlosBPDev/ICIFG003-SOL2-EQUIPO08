@@ -16,7 +16,11 @@ function fechaNoAnteriorAHoy(control: AbstractControl): ValidationErrors | null 
   const hoy = new Date();
   hoy.setHours(0, 0, 0, 0);
   const fecha = new Date(control.value + 'T00:00:00');
-  return fecha >= hoy ? null : { fechaAnterior: true };
+  if (fecha < hoy) return { fechaAnterior: true };
+  const maxFecha = new Date(hoy);
+  maxFecha.setMonth(maxFecha.getMonth() + 6);
+  if (fecha > maxFecha) return { fechaExcedeMaximo: true };
+  return null;
 }
 
 @Component({
@@ -38,6 +42,8 @@ export class ReservaFormComponent implements OnInit {
   errorConflicto = '';
   submitted = false;
   busquedaRealizada = false;
+  errorMsg: string | null = null;
+  successMsg: string | null = null;
 
   private salaIdPreseleccionada: number | null = null;
 
@@ -77,6 +83,7 @@ export class ReservaFormComponent implements OnInit {
   }
 
   loadSalas(): void {
+    this.errorMsg = null;
     this.salaService.getSalas().subscribe({
       next: (data) => {
         this.salas = data;
@@ -85,7 +92,10 @@ export class ReservaFormComponent implements OnInit {
           this.onSalaChange();
         }
       },
-      error: (err) => { console.error('Error al cargar salas:', err); }
+      error: (err) => {
+        this.logger.error('Error al cargar salas: {}', err.message);
+        this.errorMsg = err.error?.userMessage || 'No se pudieron cargar las salas. Verifica tu conexión.';
+      }
     });
   }
 
@@ -115,6 +125,7 @@ export class ReservaFormComponent implements OnInit {
         this.logger.error('Error al buscar estudiantes: {}', err.message);
         this.estudiantesEncontrados = [];
         this.buscandoEstudiantes = false;
+        this.errorMsg = err.error?.userMessage || 'Error al buscar estudiantes. Verifica tu conexión.';
       }
     });
   }
@@ -158,6 +169,7 @@ export class ReservaFormComponent implements OnInit {
   onSubmit(): void {
     this.submitted = true;
     this.errorConflicto = '';
+    this.errorMsg = null;
 
     if (this.reservaForm.invalid || !this.estudianteSeleccionado) {
       this.logger.warn('Formulario de reserva invalido');
@@ -191,16 +203,19 @@ export class ReservaFormComponent implements OnInit {
       next: (response) => {
         this.logger.info('Reserva creada exitosamente, redirigiendo a /reservas');
         this.submitting = false;
-        this.router.navigate(['/reservas'], { queryParams: params });
+        this.successMsg = 'Reserva creada exitosamente. Redirigiendo...';
+        setTimeout(() => {
+          this.router.navigate(['/reservas'], { queryParams: params });
+        }, 1500);
       },
       error: (err) => {
         this.submitting = false;
-        const mensaje = err?.error?.message || err?.message || '';
-        this.logger.error('Error al crear reserva: {}', mensaje);
-        if (mensaje.toLowerCase().includes('conflicto') || mensaje.toLowerCase().includes('ya existe')) {
+        const userMsg = err.error?.userMessage || err?.error?.message || err?.message || '';
+        this.logger.error('Error al crear reserva: {}', userMsg);
+        if (userMsg.toLowerCase().includes('conflicto') || userMsg.toLowerCase().includes('ya existe')) {
           this.errorConflicto = 'Ya existe una reserva confirmada para esta sala, horario y fecha. Por favor selecciona otro horario.';
         } else {
-          this.errorConflicto = mensaje || 'Ocurrió un error al crear la reserva. Intenta nuevamente.';
+          this.errorMsg = err.error?.userMessage || userMsg || 'Ocurrió un error al crear la reserva. Intenta nuevamente.';
         }
       }
     });
@@ -218,5 +233,9 @@ export class ReservaFormComponent implements OnInit {
 
   get sinEstudiante(): boolean {
     return this.submitted && !this.estudianteSeleccionado;
+  }
+
+  get hoy(): string {
+    return new Date().toISOString().split('T')[0];
   }
 }

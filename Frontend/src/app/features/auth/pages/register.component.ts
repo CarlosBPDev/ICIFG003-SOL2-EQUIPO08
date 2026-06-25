@@ -26,6 +26,7 @@ import { LoggerService } from '../../../services/logger.service';
               [(ngModel)]="correo"
               name="correo"
               required
+              autocomplete="email"
             >
           </div>
 
@@ -38,6 +39,8 @@ import { LoggerService } from '../../../services/logger.service';
               [(ngModel)]="password"
               name="password"
               required
+              minlength="6"
+              autocomplete="new-password"
             >
           </div>
 
@@ -211,7 +214,19 @@ export class RegisterComponent implements OnInit {
 
   onSubmit(): void {
     this.logger.info('Intento de registro para correo: {}', this.correo);
-    if (!this.correo.trim() || !this.password.trim()) return;
+    if (!this.correo.trim()) {
+      this.errorMsg = 'Ingresa un correo electrónico.';
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.correo.trim())) {
+      this.errorMsg = 'Ingresa un correo electrónico válido (ej: nombre@correo.com).';
+      return;
+    }
+    if (!this.password || this.password.length < 6) {
+      this.errorMsg = 'La contraseña debe tener al menos 6 caracteres.';
+      return;
+    }
 
     this.loading = true;
     this.errorMsg = '';
@@ -235,7 +250,7 @@ export class RegisterComponent implements OnInit {
       },
       error: (err) => {
         this.logger.error('Error en registro: {}', err.message);
-        this.errorMsg = 'Error al comunicarse con el servidor. Intenta nuevamente.';
+        this.errorMsg = err.error?.userMessage || 'Error al comunicarse con el servidor. Intenta nuevamente.';
         this.loading = false;
       }
     });

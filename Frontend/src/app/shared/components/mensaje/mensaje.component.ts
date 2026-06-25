@@ -11,7 +11,7 @@ import { LoggerService } from '../../../services/logger.service';
 })
 export class MensajeComponent implements OnInit {
   @Input() tipo: 'exito' | 'error' | 'advertencia' = 'error';
-  @Input() texto: string = '';
+  @Input() texto: string | null = null;
 
   constructor(private logger: LoggerService) {}
 

@@ -10,6 +10,9 @@
   </nav>
 
   <main class="form-main">
+    <app-mensaje [tipo]="'error'" [texto]="errorMsg"></app-mensaje>
+    <app-mensaje [tipo]="'exito'" [texto]="successMsg"></app-mensaje>
+
     <form [formGroup]="reservaForm" (ngSubmit)="onSubmit()" novalidate class="reserva-form">
 
       <aside class="form-tips">
@@ -88,9 +91,12 @@
               type="date"
               id="fechaReserva"
               formControlName="fechaReserva"
+              [min]="hoy"
               class="form-control date-picker"
               tabindex="2">
-            <p *ngIf="fechaInvalida" class="field-error" role="alert">La fecha no puede ser anterior a hoy.</p>
+            <p *ngIf="fechaInvalida" class="field-error" role="alert">
+              {{ reservaForm.get('fechaReserva')?.errors?.['fechaAnterior'] ? 'La fecha no puede ser anterior a hoy.' : 'La fecha no puede superar los 6 meses desde hoy.' }}
+            </p>
           </div>
         </section>
       </article>

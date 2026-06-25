@@ -8,6 +8,8 @@
   </header>
 
   <main class="reservas-main">
+    <app-mensaje [tipo]="'error'" [texto]="errorSalasMsg"></app-mensaje>
+
     <!-- Selector de Criterios -->
     <section class="criterios-card">
       <h2>Seleccionar Sala y Fecha</h2>
@@ -27,10 +29,12 @@
         <!-- Selector Fecha -->
         <div class="criterio-group">
           <label for="fechaInput" class="form-label">Fecha de Consulta</label>
-          <input type="date" id="fechaInput" [(ngModel)]="selectedFecha" (change)="onCriteriaChange()" class="form-control date-picker">
+          <input type="date" id="fechaInput" [(ngModel)]="selectedFecha" (change)="onCriteriaChange()" [min]="hoy" class="form-control date-picker">
         </div>
       </div>
     </section>
+
+    <app-mensaje [tipo]="'error'" [texto]="errorReservasMsg"></app-mensaje>
 
     <!-- Resultados -->
     <section class="reservas-table-section" *ngIf="selectedSalaId && selectedFecha">
