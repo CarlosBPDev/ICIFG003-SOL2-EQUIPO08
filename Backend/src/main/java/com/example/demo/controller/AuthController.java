@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +28,7 @@ public class AuthController {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @PostMapping("/login")
-    public EstudianteResponseDTO login(@RequestBody LoginRequestDTO request) {
+    public EstudianteResponseDTO login(@Valid @RequestBody LoginRequestDTO request) {
         String credential = request.getUsername();
         log.info("Intento de login para usuario: {}", credential);
 

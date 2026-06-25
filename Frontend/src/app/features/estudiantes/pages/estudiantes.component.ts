@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EstudianteService } from '../../../services/estudiante.service';
+import { MensajeComponent } from '../../../shared/components/mensaje/mensaje.component';
 import { EstudianteResponseDTO } from '../../../models';
-import { LoggerService } from '../../../services/logger.service';
 
 @Component({
   selector: 'app-estudiantes',
@@ -39,6 +39,8 @@ import { LoggerService } from '../../../services/logger.service';
             </button>
           </div>
         </section>
+
+        <app-mensaje [tipo]="'error'" [texto]="errorMsg"></app-mensaje>
 
         <section class="results-section" *ngIf="busquedaRealizada">
           <div class="section-header">
@@ -241,24 +243,17 @@ import { LoggerService } from '../../../services/logger.service';
     }
   `]
 })
-export class EstudiantesComponent implements OnInit {
+export class EstudiantesComponent {
   searchTerm = '';
   estudiantes: EstudianteResponseDTO[] = [];
   loading = false;
   busquedaRealizada = false;
+  errorMsg: string | null = null;
 
-  constructor(
-    private estudianteService: EstudianteService,
-    private logger: LoggerService
-  ) {}
-
-  ngOnInit(): void {
-    this.logger.info('Componente de estudiantes inicializado');
-  }
+  constructor(private estudianteService: EstudianteService) {}
 
   buscar(): void {
     const termino = this.searchTerm.trim();
-    this.logger.info('Buscando estudiantes con termino: {}', termino);
     if (!termino) return;
 
     this.loading = true;
@@ -275,14 +270,14 @@ export class EstudiantesComponent implements OnInit {
 
     this.estudianteService.buscarEstudiante(query).subscribe({
       next: (data) => {
-        this.logger.info('Estudiantes encontrados: {}', data.length);
         this.estudiantes = data;
         this.loading = false;
+        this.errorMsg = null;
       },
       error: (err) => {
-        this.logger.error('Error al buscar estudiantes: {}', err.message);
         this.estudiantes = [];
         this.loading = false;
+        this.errorMsg = err.error?.userMessage || 'Error al buscar estudiantes. Verifica tu conexión.';
       }
     });
   }

@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { EstudianteService } from '../../../services/estudiante.service';
 import { AuthService } from '../../../services/auth.service';
-import { LoggerService } from '../../../services/logger.service';
 
 @Component({
   selector: 'app-register',
@@ -26,6 +25,7 @@ import { LoggerService } from '../../../services/logger.service';
               [(ngModel)]="correo"
               name="correo"
               required
+              autocomplete="email"
             >
           </div>
 
@@ -38,6 +38,8 @@ import { LoggerService } from '../../../services/logger.service';
               [(ngModel)]="password"
               name="password"
               required
+              minlength="6"
+              autocomplete="new-password"
             >
           </div>
 
@@ -191,7 +193,7 @@ import { LoggerService } from '../../../services/logger.service';
     }
   `]
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
   correo = '';
   password = '';
   errorMsg = '';
@@ -201,41 +203,47 @@ export class RegisterComponent implements OnInit {
   constructor(
     private estudianteService: EstudianteService,
     private authService: AuthService,
-    private router: Router,
-    private logger: LoggerService
+    private router: Router
   ) {}
 
-  ngOnInit(): void {
-    this.logger.info('Componente de registro inicializado');
-  }
-
   onSubmit(): void {
-    this.logger.info('Intento de registro para correo: {}', this.correo);
-    if (!this.correo.trim() || !this.password.trim()) return;
+    if (!this.correo.trim()) {
+      this.errorMsg = 'Ingresa un correo electrónico.';
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.correo.trim())) {
+      this.errorMsg = 'Ingresa un correo electrónico válido (ej: nombre@correo.com).';
+      return;
+    }
+    if (!this.password || this.password.length < 6) {
+      this.errorMsg = 'La contraseña debe tener al menos 6 caracteres.';
+      return;
+    }
 
     this.loading = true;
     this.errorMsg = '';
     this.successMsg = '';
 
+    // Simulate registration by checking if the student exists in the system
     this.estudianteService.buscarEstudiante({ correo: this.correo.trim() }).subscribe({
       next: (data) => {
         const estudiante = data.find(e => e.correo === this.correo.trim());
         if (estudiante) {
-          this.logger.info('Registro exitoso para: {}', this.correo);
+          // In a real app we would POST to /api/usuarios to create credentials.
+          // Since the API only has /api/estudiantes search, we simulate success.
           this.successMsg = '¡Registro exitoso! Iniciando sesión...';
           setTimeout(() => {
             this.authService.login(estudiante);
             this.router.navigate(['/salas']);
           }, 1500);
         } else {
-          this.logger.warn('Estudiante no encontrado con correo: {}', this.correo);
           this.errorMsg = 'No existe un estudiante registrado con este correo institucional. Contacta a la biblioteca.';
           this.loading = false;
         }
       },
       error: (err) => {
-        this.logger.error('Error en registro: {}', err.message);
-        this.errorMsg = 'Error al comunicarse con el servidor. Intenta nuevamente.';
+        this.errorMsg = err.error?.userMessage || 'Error al comunicarse con el servidor. Intenta nuevamente.';
         this.loading = false;
       }
     });

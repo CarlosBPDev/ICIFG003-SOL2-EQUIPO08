@@ -8,7 +8,6 @@ import { EstudianteService } from '../../../services/estudiante.service';
 import { SalaService } from '../../../services/sala.service';
 import { HorarioService } from '../../../services/horario.service';
 import { ReservaService } from '../../../services/reserva.service';
-import { LoggerService } from '../../../services/logger.service';
 import { EstudianteResponseDTO, SalaResponseDTO, HorarioDisponibleResponseDTO } from '../../../models';
 
 function fechaNoAnteriorAHoy(control: AbstractControl): ValidationErrors | null {
@@ -16,7 +15,11 @@ function fechaNoAnteriorAHoy(control: AbstractControl): ValidationErrors | null 
   const hoy = new Date();
   hoy.setHours(0, 0, 0, 0);
   const fecha = new Date(control.value + 'T00:00:00');
-  return fecha >= hoy ? null : { fechaAnterior: true };
+  if (fecha < hoy) return { fechaAnterior: true };
+  const maxFecha = new Date(hoy);
+  maxFecha.setMonth(maxFecha.getMonth() + 6);
+  if (fecha > maxFecha) return { fechaExcedeMaximo: true };
+  return null;
 }
 
 @Component({
@@ -38,6 +41,8 @@ export class ReservaFormComponent implements OnInit {
   errorConflicto = '';
   submitted = false;
   busquedaRealizada = false;
+  errorMsg: string | null = null;
+  successMsg: string | null = null;
 
   private salaIdPreseleccionada: number | null = null;
 
@@ -48,7 +53,6 @@ export class ReservaFormComponent implements OnInit {
     private salaService: SalaService,
     private horarioService: HorarioService,
     private reservaService: ReservaService,
-    private logger: LoggerService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -62,11 +66,9 @@ export class ReservaFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.logger.info('Componente de formulario de reserva inicializado');
     this.route.queryParams.subscribe(params => {
       if (params['salaId']) {
         this.salaIdPreseleccionada = Number(params['salaId']);
-        this.logger.info('Sala preseleccionada ID: {}', params['salaId']);
       }
     });
     this.loadSalas();
@@ -77,6 +79,7 @@ export class ReservaFormComponent implements OnInit {
   }
 
   loadSalas(): void {
+    this.errorMsg = null;
     this.salaService.getSalas().subscribe({
       next: (data) => {
         this.salas = data;
@@ -85,7 +88,10 @@ export class ReservaFormComponent implements OnInit {
           this.onSalaChange();
         }
       },
-      error: (err) => { console.error('Error al cargar salas:', err); }
+      error: (err) => {
+        console.error('Error al cargar salas:', err);
+        this.errorMsg = err.error?.userMessage || 'No se pudieron cargar las salas. Verifica tu conexión.';
+      }
     });
   }
 
@@ -107,20 +113,18 @@ export class ReservaFormComponent implements OnInit {
 
     this.estudianteService.buscarEstudiante(query).subscribe({
       next: (data) => {
-        this.logger.info('Estudiantes encontrados en busqueda: {}', data.length);
         this.estudiantesEncontrados = data;
         this.buscandoEstudiantes = false;
       },
       error: (err) => {
-        this.logger.error('Error al buscar estudiantes: {}', err.message);
         this.estudiantesEncontrados = [];
         this.buscandoEstudiantes = false;
+        this.errorMsg = err.error?.userMessage || 'Error al buscar estudiantes. Verifica tu conexión.';
       }
     });
   }
 
   seleccionarEstudiante(est: EstudianteResponseDTO): void {
-    this.logger.info('Estudiante seleccionado: {} {} (ID: {})', est.nombre, est.apellido, est.id);
     this.estudianteSeleccionado = est;
     this.estudiantesEncontrados = [];
     this.reservaForm.get('estudianteSearch')?.setValue(est.rut + ' - ' + est.nombre + ' ' + est.apellido);
@@ -158,13 +162,9 @@ export class ReservaFormComponent implements OnInit {
   onSubmit(): void {
     this.submitted = true;
     this.errorConflicto = '';
+    this.errorMsg = null;
 
-    if (this.reservaForm.invalid || !this.estudianteSeleccionado) {
-      this.logger.warn('Formulario de reserva invalido');
-      return;
-    }
-
-    this.logger.info('Enviando formulario de reserva');
+    if (this.reservaForm.invalid || !this.estudianteSeleccionado) return;
 
     const formValue = this.reservaForm.value;
     this.submitting = true;
@@ -188,19 +188,20 @@ export class ReservaFormComponent implements OnInit {
       horarioDisponibleId: formValue.horarioDisponibleId,
       estadoReservaId: 1
     }).subscribe({
-      next: (response) => {
-        this.logger.info('Reserva creada exitosamente, redirigiendo a /reservas');
+      next: () => {
         this.submitting = false;
-        this.router.navigate(['/reservas'], { queryParams: params });
+        this.successMsg = 'Reserva creada exitosamente. Redirigiendo...';
+        setTimeout(() => {
+          this.router.navigate(['/reservas'], { queryParams: params });
+        }, 1500);
       },
       error: (err) => {
         this.submitting = false;
-        const mensaje = err?.error?.message || err?.message || '';
-        this.logger.error('Error al crear reserva: {}', mensaje);
-        if (mensaje.toLowerCase().includes('conflicto') || mensaje.toLowerCase().includes('ya existe')) {
+        const userMsg = err.error?.userMessage || err?.error?.message || err?.message || '';
+        if (userMsg.toLowerCase().includes('conflicto') || userMsg.toLowerCase().includes('ya existe')) {
           this.errorConflicto = 'Ya existe una reserva confirmada para esta sala, horario y fecha. Por favor selecciona otro horario.';
         } else {
-          this.errorConflicto = mensaje || 'Ocurrió un error al crear la reserva. Intenta nuevamente.';
+          this.errorMsg = err.error?.userMessage || userMsg || 'Ocurrió un error al crear la reserva. Intenta nuevamente.';
         }
       }
     });
@@ -218,5 +219,9 @@ export class ReservaFormComponent implements OnInit {
 
   get sinEstudiante(): boolean {
     return this.submitted && !this.estudianteSeleccionado;
+  }
+
+  get hoy(): string {
+    return new Date().toISOString().split('T')[0];
   }
 }
