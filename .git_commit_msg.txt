@@ -1,0 +1,17 @@
+feat: implementar persistencia de interacciones del frontend (mensajes de contacto)
+
+Requerimiento cumplido:
+- Asegurar que las interacciones en el frontend Angular terminen siendo persistentes en la base de datos en el backend (mensajes enviados por los clientes).
+
+Archivos creados/modificados:
+[Backend]
+- MensajeContactoEntity.java: Entidad JPA para la tabla mensaje_contacto.
+- MensajeContactoRepository.java: Repositorio para acceso a base de datos.
+- MensajeContactoService.java: Logica de negocio y guardado.
+- MensajeContactoController.java: Controlador REST POST /api/mensajes.
+
+[Frontend]
+- contacto.service.ts: Servicio HTTP para conectar con el backend.
+- contacto.component (ts, html, css): Componente standalone con formulario reactivo.
+- app.routes.ts: Agregada la ruta /contacto.
+- menu.component.ts: Agregado el enlace en la barra de navegacion principal.

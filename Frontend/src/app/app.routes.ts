@@ -10,5 +10,6 @@ export const routes: Routes = [
   { path: 'reservas/nueva', loadComponent: () => import('./features/reservas/pages/reserva-form.component').then(m => m.ReservaFormComponent), canActivate: [authGuard] },
   { path: 'reservas', loadComponent: () => import('./features/reservas/pages/reservas.component').then(m => m.ReservasComponent), canActivate: [authGuard] },
   { path: 'estudiantes', loadComponent: () => import('./features/estudiantes/pages/estudiantes.component').then(m => m.EstudiantesComponent), canActivate: [authGuard] },
+  { path: 'contacto', loadComponent: () => import('./features/contacto/pages/contacto.component').then(m => m.ContactoComponent) },
   { path: '**', redirectTo: 'login' }
 ];

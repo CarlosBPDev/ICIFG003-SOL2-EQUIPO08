@@ -15,7 +15,8 @@ export class MenuComponent implements OnInit {
     { label: 'Inicio', path: '/home' },
     { label: 'Salas', path: '/salas' },
     { label: 'Reservas', path: '/reservas' },
-    { label: 'Estudiantes', path: '/estudiantes' }
+    { label: 'Estudiantes', path: '/estudiantes' },
+    { label: 'Contacto', path: '/contacto' }
   ];
 
   constructor(private logger: LoggerService) {}

@@ -1,0 +1,52 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">Contacto</h4>
+        </div>
+        <div class="card-body">
+          <p class="text-muted">¿Tienes alguna duda o consulta? Déjanos un mensaje.</p>
+
+          <div *ngIf="mensajeExito" class="alert alert-success">
+            {{ mensajeExito }}
+          </div>
+          
+          <div *ngIf="mensajeError" class="alert alert-danger">
+            {{ mensajeError }}
+          </div>
+
+          <form [formGroup]="contactoForm" (ngSubmit)="enviar()">
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre</label>
+              <input type="text" id="nombre" class="form-control" formControlName="nombre" placeholder="Ingresa tu nombre">
+              <div *ngIf="contactoForm.get('nombre')?.invalid && contactoForm.get('nombre')?.touched" class="text-danger small mt-1">
+                El nombre es requerido y debe tener al menos 3 caracteres.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label">Correo Electrónico</label>
+              <input type="email" id="email" class="form-control" formControlName="email" placeholder="ejemplo@correo.com">
+              <div *ngIf="contactoForm.get('email')?.invalid && contactoForm.get('email')?.touched" class="text-danger small mt-1">
+                Debe ingresar un correo válido.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="mensaje" class="form-label">Mensaje</label>
+              <textarea id="mensaje" rows="4" class="form-control" formControlName="mensaje" placeholder="Escribe tu mensaje aquí..."></textarea>
+              <div *ngIf="contactoForm.get('mensaje')?.invalid && contactoForm.get('mensaje')?.touched" class="text-danger small mt-1">
+                El mensaje es requerido y debe tener al menos 10 caracteres.
+              </div>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary" [disabled]="contactoForm.invalid">Enviar Mensaje</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
