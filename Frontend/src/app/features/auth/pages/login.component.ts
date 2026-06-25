@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { LoggerService } from '../../../services/logger.service';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +26,6 @@ import { AuthService } from '../../../services/auth.service';
               [(ngModel)]="correo"
               name="correo"
               required
-              autocomplete="email"
               class="form-control"
             >
           </div>
@@ -39,8 +39,6 @@ import { AuthService } from '../../../services/auth.service';
               [(ngModel)]="password"
               name="password"
               required
-              minlength="4"
-              autocomplete="current-password"
               class="form-control"
             >
           </div>
@@ -175,7 +173,7 @@ import { AuthService } from '../../../services/auth.service';
     }
   `]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   correo = '';
   password = '';
   errorMsg = '';
@@ -183,17 +181,18 @@ export class LoginComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private logger: LoggerService
   ) {}
 
+  ngOnInit(): void {
+    this.logger.info('Componente de login inicializado');
+  }
+
   onSubmit(): void {
+    this.logger.info('Intento de inicio de sesion para: {}', this.correo);
     if (!this.correo.trim()) {
       this.errorMsg = 'Ingresa un correo electrónico.';
-      return;
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(this.correo.trim())) {
-      this.errorMsg = 'Ingresa un correo electrónico válido (ej: nombre@correo.com).';
       return;
     }
     if (!this.password || this.password.length < 4) {
@@ -206,20 +205,12 @@ export class LoginComponent {
 
     this.authService.loginWithCredentials(this.correo.trim(), this.password).subscribe({
       next: () => {
+        this.logger.info('Redirigiendo a /salas tras login exitoso');
         this.router.navigate(['/salas']);
       },
       error: (err) => {
-        if (err.status === 0) {
-          this.errorMsg = 'No se pudo conectar con el servidor. Verifica tu conexión.';
-        } else if (err.error?.userMessage) {
-          this.errorMsg = err.error.userMessage;
-        } else if (err.error?.message) {
-          this.errorMsg = err.error.message;
-        } else if (err.error?.error) {
-          this.errorMsg = err.error.error;
-        } else {
-          this.errorMsg = 'Correo o contraseña incorrectos.';
-        }
+        this.logger.error('Error en login: {}', err.error?.error || err.message);
+        this.errorMsg = err.error?.error || 'Correo o contraseña incorrectos.';
         this.loading = false;
       }
     });

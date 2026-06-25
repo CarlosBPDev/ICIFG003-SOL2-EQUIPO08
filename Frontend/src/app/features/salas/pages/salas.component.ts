@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -6,17 +6,17 @@ import { SalaService } from '../../../services/sala.service';
 import { ReservaService } from '../../../services/reserva.service';
 import { HorarioService } from '../../../services/horario.service';
 import { SalaCardComponent } from '../../../shared/components/sala-card/sala-card.component';
-import { MensajeComponent } from '../../../shared/components/mensaje/mensaje.component';
+import { LoggerService } from '../../../services/logger.service';
 import { SalaResponseDTO, ReservaResponseDTO } from '../../../models';
 
 @Component({
   selector: 'app-salas',
   standalone: true,
-  imports: [CommonModule, FormsModule, SalaCardComponent, MensajeComponent],
+  imports: [CommonModule, FormsModule, SalaCardComponent],
   templateUrl: './salas.component.html',
   styleUrls: ['./salas.component.css']
 })
-export class SalasComponent implements OnInit, OnDestroy {
+export class SalasComponent implements OnInit {
   salas: SalaResponseDTO[] = [];
   filteredSalas: SalaResponseDTO[] = [];
   reservations: ReservaResponseDTO[] = [];
@@ -25,40 +25,25 @@ export class SalasComponent implements OnInit, OnDestroy {
   fechaFilter: string = '';
 
   loading: boolean = false;
-  errorMsg: string | null = null;
-  successMsg: string | null = null;
-  private successTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(
     private salaService: SalaService,
     private reservaService: ReservaService,
     private horarioService: HorarioService,
-    private router: Router
+    private router: Router,
+    private logger: LoggerService
   ) {}
 
   ngOnInit(): void {
+    this.logger.info('Componente de salas inicializado');
     this.loadSalas();
-  }
-
-  private showSuccess(msg: string): void {
-    this.successMsg = msg;
-    if (this.successTimer) clearTimeout(this.successTimer);
-    this.successTimer = setTimeout(() => this.successMsg = null, 3000);
-  }
-
-  private clearMessages(): void {
-    this.errorMsg = null;
-    this.successMsg = null;
-  }
-
-  get hoy(): string {
-    return new Date().toISOString().split('T')[0];
   }
 
   loadSalas(): void {
     this.loading = true;
-    this.clearMessages();
+    this.logger.info('Cargando salas con filtro de capacidad: {}, fecha: {}', this.capacidadFilter, this.fechaFilter);
 
+    // Determine capacity range params based on filter
     let capacidadMax: number | undefined;
     let capacidadMin: number | undefined;
 
@@ -71,6 +56,7 @@ export class SalasComponent implements OnInit, OnDestroy {
     }
 
     if (this.fechaFilter) {
+      // Use the availability endpoint when a date is selected
       this.salaService.getSalasDisponibles(this.fechaFilter).subscribe({
         next: (data) => {
           this.salas = data;
@@ -78,11 +64,9 @@ export class SalasComponent implements OnInit, OnDestroy {
           this.applyCapacidadFilter();
           this.loadReservationsForDate();
           this.loading = false;
-          this.showSuccess('Salas disponibles cargadas correctamente.');
         },
         error: (err) => {
           console.error('Error al cargar salas disponibles:', err);
-          this.errorMsg = err.error?.userMessage || 'No se pudieron cargar las salas. Verifica tu conexión.';
           this.loading = false;
         }
       });
@@ -93,11 +77,9 @@ export class SalasComponent implements OnInit, OnDestroy {
           this.loadHorarios();
           this.filteredSalas = data;
           this.loading = false;
-          this.showSuccess('Salas cargadas correctamente.');
         },
         error: (err) => {
           console.error('Error al cargar salas:', err);
-          this.errorMsg = err.error?.userMessage || 'No se pudieron cargar las salas. Verifica tu conexión.';
           this.loading = false;
         }
       });
@@ -126,7 +108,6 @@ export class SalasComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error('Error al cargar reservas:', err);
-        this.errorMsg = err.error?.userMessage || 'No se pudieron cargar las reservas.';
       }
     });
   }
@@ -159,10 +140,7 @@ export class SalasComponent implements OnInit, OnDestroy {
   }
 
   reservarSala(salaId: number): void {
+    this.logger.info('Navegando a formulario de reserva para sala ID: {}', salaId);
     this.router.navigate(['/reservas/nueva'], { queryParams: { salaId } });
-  }
-
-  ngOnDestroy(): void {
-    if (this.successTimer) clearTimeout(this.successTimer);
   }
 }

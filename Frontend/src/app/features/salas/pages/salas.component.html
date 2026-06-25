@@ -38,7 +38,7 @@
           <div class="filter-group">
             <label for="fechaFilter" class="form-label">Disponibilidad por Fecha</label>
             <div class="date-input-wrapper">
-              <input type="date" id="fechaFilter" [(ngModel)]="fechaFilter" (ngModelChange)="onFilterChange()" [min]="hoy" class="form-control date-picker" aria-label="Seleccionar fecha">
+              <input type="date" id="fechaFilter" [(ngModel)]="fechaFilter" (ngModelChange)="onFilterChange()" class="form-control date-picker" aria-label="Seleccionar fecha">
             </div>
           </div>
         </div>
@@ -50,10 +50,7 @@
           <div *ngIf="loading" class="spinner" role="status" aria-label="Cargando"></div>
         </div>
 
-        <app-mensaje [tipo]="'error'" [texto]="errorMsg"></app-mensaje>
-        <app-mensaje [tipo]="'exito'" [texto]="successMsg"></app-mensaje>
-
-        <div class="salas-grid" *ngIf="!errorMsg && filteredSalas.length > 0; else noSalas">
+        <div class="salas-grid" *ngIf="filteredSalas.length > 0; else noSalas">
           <app-sala-card
             *ngFor="let sala of filteredSalas"
             [sala]="sala"

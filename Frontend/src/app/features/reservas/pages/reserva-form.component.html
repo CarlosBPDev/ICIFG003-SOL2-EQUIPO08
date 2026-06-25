@@ -10,9 +10,6 @@
   </nav>
 
   <main class="form-main">
-    <app-mensaje [tipo]="'error'" [texto]="errorMsg"></app-mensaje>
-    <app-mensaje [tipo]="'exito'" [texto]="successMsg"></app-mensaje>
-
     <form [formGroup]="reservaForm" (ngSubmit)="onSubmit()" novalidate class="reserva-form">
 
       <aside class="form-tips">
@@ -39,7 +36,6 @@
                   placeholder="Ej: 12345678-5 o Juan Pérez"
                   (input)="buscarEstudiante()"
                   autocomplete="off"
-                  maxlength="100"
                   aria-describedby="estudiante-hint"
                   tabindex="1"
                   class="form-control">
@@ -92,12 +88,9 @@
               type="date"
               id="fechaReserva"
               formControlName="fechaReserva"
-              [min]="hoy"
               class="form-control date-picker"
               tabindex="2">
-            <p *ngIf="fechaInvalida" class="field-error" role="alert">
-              {{ reservaForm.get('fechaReserva')?.errors?.['fechaAnterior'] ? 'La fecha no puede ser anterior a hoy.' : 'La fecha no puede superar los 6 meses desde hoy.' }}
-            </p>
+            <p *ngIf="fechaInvalida" class="field-error" role="alert">La fecha no puede ser anterior a hoy.</p>
           </div>
         </section>
       </article>
@@ -167,7 +160,6 @@
               rows="4"
               placeholder="Describe el motivo de la reserva (mín. 15 caracteres)"
               tabindex="8"
-              minlength="15"
               aria-describedby="obs-counter"
               class="form-control"></textarea>
             <span id="obs-counter" class="field-hint">{{ reservaForm.get('observacion')?.value?.length || 0 }}/15 caracteres</span>
