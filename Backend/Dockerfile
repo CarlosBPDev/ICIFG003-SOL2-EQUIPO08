@@ -24,5 +24,5 @@ ENV PORT=6789
 EXPOSE ${PORT}
 
 # Comando de inicio
-# Usamos -Dserver.port para obligar a Spring Boot a escuchar en el puerto que Render asigne
-ENTRYPOINT ["java", "-Dserver.port=${PORT}", "-Xmx512m", "-jar", "app.jar"]
+# Usamos shell form para que ${PORT} se expanda correctamente
+ENTRYPOINT ["sh", "-c", "java -Dserver.port=${PORT} -Xmx512m -jar app.jar"]

@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # ========================
+  # Base de datos MySQL
+  # ========================
+  db:
+    image: mysql:8.0
+    container_name: equipo08-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: demo01
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot123"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # ========================
+  # Backend - Spring Boot
+  # ========================
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: equipo08-backend
+    restart: unless-stopped
+    ports:
+      - "6789:6789"
+    environment:
+      PORT: 6789
+      DB_URL: jdbc:mysql://db:3306/demo01?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      DB_USERNAME: root
+      DB_PASSWORD: root123
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ========================
+  # Frontend - Angular + Nginx
+  # ========================
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: equipo08-frontend
+    restart: unless-stopped
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
